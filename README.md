@@ -9,12 +9,16 @@
 
 - **Everforest Dark Palette**: Deep earthy tones (`#2d353b`, `#232a2e`) balanced with soft sage (`#a7c080`) and calm cyan (`#70c0ba`) accents.
 - **Waybar Aesthetic on Plasma 6**: Floating top pill bar and dock powered by `panel-colorizer` with subtle borders and shadows.
+  - **Top-Left App Launcher**: Sleek Garuda-branded launcher pill anchored at the far top-left corner (`x=0`), triggered by standalone <kbd>Super</kbd>.
+  - **Dynamic Workspaces**: Workspaces expand seamlessly on demand; pressing <kbd>Super</kbd> + <kbd>1</kbd>..<kbd>9</kbd> jumps to that workspace and auto-creates it if it doesn't already exist.
+  - **Clean Status Tray**: Distraction-free top bar with volume, bluetooth, battery, brightness, and network status pills.
 - **Custom Clean Status Icons**:
   - 󰕾 **Audio**: Cyan acoustic-wave speaker icon.
   - 󰂯 **Bluetooth**: Pure white Nordic rune with zero visual clutter.
   - 󰁹 **Battery**: Sleek vertical battery gauge without overlapping percentage numbers.
 - **Smooth Workspace Switching**:
   - Seamless navigation using <kbd>Super</kbd> + <kbd>→</kbd> / <kbd>←</kbd>.
+  - Overview screen on <kbd>Super</kbd> + <kbd>V</kbd> to inspect, add (`+`), or remove (`✕`) desktops manually.
   - Disabled popup arrow OSD transitions and desktop close buttons for a distraction-free workflow.
 - **Dual Desktop Experience**:
   - **KDE Plasma 6** mode with native panel styling.
@@ -32,6 +36,7 @@ GRNVX-theme/
 ├── hyprland.sh          # Hyprland + Quickshell standalone installer & config
 ├── adapt_waybar.py      # Palette extraction script matching bar colors to wallpaper
 ├── configs/
+│   ├── kwin-scripts/    # Dynamic workspaces KWin 6 automation script
 │   ├── panel-colorizer/ # 'Everforest Waybar' and 'Everforest Dock' presets
 │   ├── hypr/            # Hyprland and Hyprpaper configurations
 │   └── quickshell/      # Modern Waybar-like Quickshell bar configuration
@@ -82,9 +87,10 @@ If migrating to standalone Hyprland:
 
 | Shortcut | Action |
 | :--- | :--- |
-| <kbd>Super</kbd> | Open Start Menu / Application Launcher |
-| <kbd>Super</kbd> + <kbd>1</kbd> .. <kbd>9</kbd> | Jump to Workspace 1 through 9 |
-| <kbd>Super</kbd> + <kbd>V</kbd> | Overview (View all workspaces, add `+` or remove `✕` manually) |
+| <kbd>Super</kbd> | Open App Launcher (Top-Left corner) |
+| <kbd>Super</kbd> + <kbd>1</kbd> .. <kbd>9</kbd> | **Open & Dynamically Create** Workspace 1 through 9 |
+| <kbd>Super</kbd> + <kbd>Shift</kbd> + <kbd>1</kbd> .. <kbd>9</kbd> | Move Active Window to Workspace 1 through 9 (Auto-creates if needed) |
+| <kbd>Super</kbd> + <kbd>V</kbd> | **Workspace Overview** (View all workspaces, add `+` or remove `✕` manually) |
 | <kbd>Super</kbd> + <kbd>→</kbd> | Switch to Next Workspace |
 | <kbd>Super</kbd> + <kbd>←</kbd> | Switch to Previous Workspace |
 | <kbd>Super</kbd> + <kbd>Return</kbd> | Launch Kitty Terminal |

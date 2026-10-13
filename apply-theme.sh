@@ -78,17 +78,57 @@ apply_panels() {
         mkdir -p "$HOME/.local/share/plasma/desktoptheme/default/icons"
         cp "$SCRIPT_DIR/icons/"*.svg "$HOME/.local/share/plasma/desktoptheme/default/icons/" 2>/dev/null || true
     fi
+    if [ -d "$SCRIPT_DIR/configs/kwin-scripts/dynamic-workspaces" ]; then
+        mkdir -p "$HOME/.local/share/kwin/scripts/dynamic-workspaces"
+        cp -r "$SCRIPT_DIR/configs/kwin-scripts/dynamic-workspaces/"* "$HOME/.local/share/kwin/scripts/dynamic-workspaces/" 2>/dev/null || true
+    fi
     kwriteconfig6 --file plasmashellrc --group PlasmaViews --group "Panel 2" --key floating 1
     kwriteconfig6 --file plasmashellrc --group PlasmaViews --group "Panel 2" --key panelOpacity 2
+    
+    # Position Kickoff at top-left corner (index 0) with Garuda icon
+    qdbus6 org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell.evaluateScript "
+var p = panels();
+for (var i = 0; i < p.length; i++) {
+    var panel = p[i];
+    var widgets = panel.widgets();
+    for (var j = 0; j < widgets.length; j++) {
+        if (widgets[j].type === 'org.kde.plasma.kickoff') {
+            var k = widgets[j];
+            k.index = 0;
+            k.currentConfigGroup = ['General'];
+            k.writeConfig('icon', 'distributor-logo-garuda');
+        }
+    }
+}
+" 2>/dev/null || true
+
     qdbus6 luisbocanegra.panel.colorizer.c2.w10 /preset preset "$HOME/.config/panel-colorizer/presets/Everforest Waybar" 2>/dev/null || true
     qdbus6 luisbocanegra.panel.colorizer.c25.w26 /preset preset "$HOME/.config/panel-colorizer/presets/Everforest Dock" 2>/dev/null || true
 }
 
 reconfigure_kwin() {
-    echo "✨ Reconfiguring KWin window effects & workspace shortcuts..."
+    echo "✨ Reconfiguring KWin window effects, launcher & dynamic workspace shortcuts..."
     kwriteconfig6 --file kwinrc --group Plugins --key desktopchangeosdEnabled false
+    kwriteconfig6 --file kwinrc --group Plugins --key dynamic-workspacesEnabled true
     kwriteconfig6 --file kwinrc --group ModifierOnlyShortcuts --key Meta "org.kde.plasmashell,/PlasmaShell,org.kde.PlasmaShell,activateLauncherMenu"
+    
+    # Reload dynamic-workspaces KWin script
+    qdbus6 org.kde.KWin /Scripting org.kde.kwin.Scripting.unloadScript "dynamic-workspaces" 2>/dev/null || true
+    qdbus6 org.kde.KWin /Scripting org.kde.kwin.Scripting.loadScript "$HOME/.local/share/kwin/scripts/dynamic-workspaces/contents/code/main.js" "dynamic-workspaces" 2>/dev/null || true
+    qdbus6 org.kde.KWin /Scripting org.kde.kwin.Scripting.start 2>/dev/null || true
     qdbus6 org.kde.KWin /KWin reconfigure 2>/dev/null || true
+
+    # Clear default shortcuts that conflict with Super+1..9
+    for i in {1..9}; do
+        kwriteconfig6 --file kglobalshortcutsrc --group kwin --key "Switch to Desktop $i" "none,none,Switch to Desktop $i"
+        kwriteconfig6 --file kglobalshortcutsrc --group plasmashell --key "activate task manager entry $i" "none,none,Activate Task Manager Entry $i"
+        kwriteconfig6 --file kglobalshortcutsrc --group kwin --key "dynamic_workspace_switch_$i" "Meta+$i,Meta+$i,Switch or Create Workspace $i"
+        kwriteconfig6 --file kglobalshortcutsrc --group kwin --key "dynamic_workspace_move_$i" "Meta+Shift+$i,Meta+Shift+$i,Move Window to Workspace $i (Dynamic)"
+    done
+
+    # Overview shortcut Super + V
+    kwriteconfig6 --file kglobalshortcutsrc --group kwin --key "Overview" "Meta+V,Meta+W,Toggle Overview"
+
     python3 -c "
 import dbus
 try:
@@ -112,26 +152,9 @@ try:
     iface.setForeignShortcutKeys(dbus.Array(['kwin', 'Switch to Previous Desktop', '', ''], signature='s'), left)
     iface.setForeignShortcutKeys(dbus.Array(['kwin', 'Switch to Next Desktop', '', ''], signature='s'), right)
 
-    # Super + 1..9 for Workspaces 1..9
-    META_BASE = 268435456
-    for i in range(1, 10):
-        iface.setForeignShortcutKeys(dbus.Array(['plasmashell', f'activate task manager entry {i}', '', ''], signature='s'), empty)
-        iface.setForeignShortcutKeys(dbus.Array(['kwin', f'Switch to Desktop {i}', '', ''], signature='s'), make_key(META_BASE + ord(str(i))))
-
     # Super + V for Workspace Overview
+    META_BASE = 268435456
     iface.setForeignShortcutKeys(dbus.Array(['kwin', 'Overview', '', ''], signature='s'), make_key(META_BASE + ord('V')))
-
-    # Ensure 9 Virtual Desktops exist and are named 1..9
-    vdm = bus.get_object('org.kde.KWin', '/VirtualDesktopManager')
-    vdm_iface = dbus.Interface(vdm, 'org.kde.KWin.VirtualDesktopManager')
-    prop_iface = dbus.Interface(vdm, 'org.freedesktop.DBus.Properties')
-    desktops = prop_iface.Get('org.kde.KWin.VirtualDesktopManager', 'desktops')
-    count = len(desktops)
-    for pos, id_str, _ in sorted(desktops, key=lambda x: x[0]):
-        vdm_iface.setDesktopName(id_str, str(pos + 1))
-    while count < 9:
-        vdm_iface.createDesktop(count, str(count + 1))
-        count += 1
 except Exception:
     pass
 " 2>/dev/null || true

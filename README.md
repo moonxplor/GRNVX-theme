@@ -82,6 +82,7 @@ If migrating to standalone Hyprland:
 
 | Shortcut | Action |
 | :--- | :--- |
+| <kbd>Super</kbd> | Open Start Menu / Application Launcher |
 | <kbd>Super</kbd> + <kbd>1</kbd> .. <kbd>9</kbd> | Jump to Workspace 1 through 9 |
 | <kbd>Super</kbd> + <kbd>V</kbd> | Overview (View all workspaces, add `+` or remove `✕` manually) |
 | <kbd>Super</kbd> + <kbd>→</kbd> | Switch to Next Workspace |

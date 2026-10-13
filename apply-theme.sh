@@ -87,6 +87,7 @@ apply_panels() {
 reconfigure_kwin() {
     echo "✨ Reconfiguring KWin window effects & workspace shortcuts..."
     kwriteconfig6 --file kwinrc --group Plugins --key desktopchangeosdEnabled false
+    kwriteconfig6 --file kwinrc --group ModifierOnlyShortcuts --key Meta "org.kde.plasmashell,/PlasmaShell,org.kde.PlasmaShell,activateLauncherMenu"
     qdbus6 org.kde.KWin /KWin reconfigure 2>/dev/null || true
     python3 -c "
 import dbus

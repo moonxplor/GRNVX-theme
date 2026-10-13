@@ -97,20 +97,40 @@ try:
     empty = dbus.Array([], signature='(ai)')
     left = dbus.Array([dbus.Struct((dbus.Array([dbus.Int32(285212690), dbus.Int32(0), dbus.Int32(0), dbus.Int32(0)], signature='i'),))], signature='(ai)')
     right = dbus.Array([dbus.Struct((dbus.Array([dbus.Int32(285212692), dbus.Int32(0), dbus.Int32(0), dbus.Int32(0)], signature='i'),))], signature='(ai)')
+    def make_key(code):
+        return dbus.Array([dbus.Struct((dbus.Array([dbus.Int32(code), dbus.Int32(0), dbus.Int32(0), dbus.Int32(0)], signature='i'),))], signature='(ai)')
+
+    # Clear conflicting shortcuts
     iface.setForeignShortcutKeys(dbus.Array(['kwin', 'Window Quick Tile Left', '', ''], signature='s'), empty)
     iface.setForeignShortcutKeys(dbus.Array(['kwin', 'Window Quick Tile Right', '', ''], signature='s'), empty)
+    iface.setForeignShortcutKeys(dbus.Array(['plasmashell', 'show-on-mouse-pos', '', ''], signature='s'), empty)
+
+    # Super + Arrows
     iface.setForeignShortcutKeys(dbus.Array(['kwin', 'Switch One Desktop to the Left', '', ''], signature='s'), left)
     iface.setForeignShortcutKeys(dbus.Array(['kwin', 'Switch One Desktop to the Right', '', ''], signature='s'), right)
     iface.setForeignShortcutKeys(dbus.Array(['kwin', 'Switch to Previous Desktop', '', ''], signature='s'), left)
     iface.setForeignShortcutKeys(dbus.Array(['kwin', 'Switch to Next Desktop', '', ''], signature='s'), right)
+
+    # Super + 1..9 for Workspaces 1..9
+    META_BASE = 268435456
+    for i in range(1, 10):
+        iface.setForeignShortcutKeys(dbus.Array(['plasmashell', f'activate task manager entry {i}', '', ''], signature='s'), empty)
+        iface.setForeignShortcutKeys(dbus.Array(['kwin', f'Switch to Desktop {i}', '', ''], signature='s'), make_key(META_BASE + ord(str(i))))
+
+    # Super + V for Workspace Overview
+    iface.setForeignShortcutKeys(dbus.Array(['kwin', 'Overview', '', ''], signature='s'), make_key(META_BASE + ord('V')))
+
+    # Ensure 9 Virtual Desktops exist and are named 1..9
     vdm = bus.get_object('org.kde.KWin', '/VirtualDesktopManager')
     vdm_iface = dbus.Interface(vdm, 'org.kde.KWin.VirtualDesktopManager')
     prop_iface = dbus.Interface(vdm, 'org.freedesktop.DBus.Properties')
     desktops = prop_iface.Get('org.kde.KWin.VirtualDesktopManager', 'desktops')
-    names = ['1', '2', '3', '4', '5', '6', '7']
+    count = len(desktops)
     for pos, id_str, _ in sorted(desktops, key=lambda x: x[0]):
-        if pos < len(names):
-            vdm_iface.setDesktopName(id_str, names[pos])
+        vdm_iface.setDesktopName(id_str, str(pos + 1))
+    while count < 9:
+        vdm_iface.createDesktop(count, str(count + 1))
+        count += 1
 except Exception:
     pass
 " 2>/dev/null || true

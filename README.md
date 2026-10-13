@@ -96,3 +96,4 @@ If migrating to standalone Hyprland:
 MIT License. Feel free to use, modify, and rice your setup!
 # GRNVX-theme
 # GRNVX-theme
+# GRNVX-theme

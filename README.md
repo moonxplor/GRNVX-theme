@@ -95,6 +95,9 @@ If migrating to standalone Hyprland:
 | <kbd>Super</kbd> + <kbd>←</kbd> | Switch to Previous Workspace |
 | <kbd>Super</kbd> + <kbd>Return</kbd> | Launch Kitty Terminal |
 | <kbd>Super</kbd> + <kbd>E</kbd> | Open File Manager (Thunar) |
+| <kbd>PrtSc</kbd>, then <kbd>F</kbd> *(or <kbd>Ctrl</kbd> + <kbd>PrtSc</kbd>)* | **Record Full Screen** |
+| <kbd>PrtSc</kbd>, then <kbd>S</kbd> *(or <kbd>Shift</kbd> + <kbd>PrtSc</kbd>)* | **Record Selected Region** |
+| <kbd>PrtSc</kbd>, then <kbd>R</kbd> *(or <kbd>Super</kbd> + <kbd>PrtSc</kbd>)* | **Record Active Window** |
 
 ---
 

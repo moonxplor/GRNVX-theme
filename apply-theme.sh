@@ -129,6 +129,11 @@ reconfigure_kwin() {
     # Overview shortcut Super + V
     kwriteconfig6 --file kglobalshortcutsrc --group kwin --key "Overview" "Meta+V,Meta+W,Toggle Overview"
 
+    # Screen recording shortcuts (PrtSc chords + Modifier fallbacks)
+    kwriteconfig6 --file kglobalshortcutsrc --group "services" --group "org.kde.spectacle.desktop" --key "RecordScreen" "Print, F\tCtrl+Print,Meta+Alt+R,Record Screen"
+    kwriteconfig6 --file kglobalshortcutsrc --group "services" --group "org.kde.spectacle.desktop" --key "RecordRegion" "Print, S\tShift+Print,Meta+Shift+R\tMeta+R,Record Rectangular Region"
+    kwriteconfig6 --file kglobalshortcutsrc --group "services" --group "org.kde.spectacle.desktop" --key "RecordWindow" "Print, R\tMeta+Print,Meta+Ctrl+R,Record Active Window"
+
     python3 -c "
 import dbus
 try:
@@ -154,7 +159,15 @@ try:
 
     # Super + V for Workspace Overview
     META_BASE = 268435456
+    SHIFT_BASE = 33554432
     iface.setForeignShortcutKeys(dbus.Array(['kwin', 'Overview', '', ''], signature='s'), make_key(META_BASE + ord('V')))
+
+    # Super + 1..9 for Dynamic Workspaces & Super + Shift + 1..9 for Move Window
+    for i in range(1, 10):
+        iface.setForeignShortcutKeys(dbus.Array(['kwin', f'Switch to Desktop {i}', '', ''], signature='s'), empty)
+        iface.setForeignShortcutKeys(dbus.Array(['plasmashell', f'activate task manager entry {i}', '', ''], signature='s'), empty)
+        iface.setForeignShortcutKeys(dbus.Array(['kwin', f'dynamic_workspace_switch_{i}', '', ''], signature='s'), make_key(META_BASE + ord(str(i))))
+        iface.setForeignShortcutKeys(dbus.Array(['kwin', f'dynamic_workspace_move_{i}', '', ''], signature='s'), make_key(META_BASE + SHIFT_BASE + ord(str(i))))
 except Exception:
     pass
 " 2>/dev/null || true

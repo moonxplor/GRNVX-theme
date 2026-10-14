@@ -168,6 +168,18 @@ try:
         iface.setForeignShortcutKeys(dbus.Array(['plasmashell', f'activate task manager entry {i}', '', ''], signature='s'), empty)
         iface.setForeignShortcutKeys(dbus.Array(['kwin', f'dynamic_workspace_switch_{i}', '', ''], signature='s'), make_key(META_BASE + ord(str(i))))
         iface.setForeignShortcutKeys(dbus.Array(['kwin', f'dynamic_workspace_move_{i}', '', ''], signature='s'), make_key(META_BASE + SHIFT_BASE + ord(str(i))))
+
+    # Super + Q to Close Window/Tab
+    ALT_BASE = 134217728
+    KEY_F4 = 16777267
+    iface.setForeignShortcutKeys(dbus.Array(['plasmashell', 'manage activities', '', ''], signature='s'), empty)
+    iface.setForeignShortcutKeys(
+        dbus.Array(['kwin', 'Window Close', '', ''], signature='s'),
+        dbus.Array([
+            dbus.Struct((dbus.Array([dbus.Int32(META_BASE + ord('Q')), dbus.Int32(0), dbus.Int32(0), dbus.Int32(0)], signature='i'),)),
+            dbus.Struct((dbus.Array([dbus.Int32(ALT_BASE + KEY_F4), dbus.Int32(0), dbus.Int32(0), dbus.Int32(0)], signature='i'),))
+        ], signature='(ai)')
+    )
 except Exception:
     pass
 " 2>/dev/null || true

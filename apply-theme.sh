@@ -77,6 +77,13 @@ apply_panels() {
     if [ -d "$SCRIPT_DIR/icons" ]; then
         mkdir -p "$HOME/.local/share/plasma/desktoptheme/default/icons"
         cp "$SCRIPT_DIR/icons/"*.svg "$HOME/.local/share/plasma/desktoptheme/default/icons/" 2>/dev/null || true
+        mkdir -p "$HOME/.local/share/icons/Tela-circle-dracula-dark/scalable/apps"
+        mkdir -p "$HOME/.local/share/icons/hicolor/512x512/apps"
+        cp "$SCRIPT_DIR/icons/garuda-eagle.svg" "$HOME/.local/share/icons/Tela-circle-dracula-dark/scalable/apps/garuda-eagle.svg" 2>/dev/null || true
+        cp "$SCRIPT_DIR/icons/garuda-eagle.svg" "$HOME/.local/share/icons/Tela-circle-dracula-dark/scalable/apps/distributor-logo-garuda.svg" 2>/dev/null || true
+        cp "$SCRIPT_DIR/icons/garuda-eagle.png" "$HOME/.local/share/icons/garuda-eagle.png" 2>/dev/null || true
+        cp "$SCRIPT_DIR/icons/garuda-eagle.png" "$HOME/.local/share/icons/hicolor/512x512/apps/distributor-logo-garuda.png" 2>/dev/null || true
+        cp "$SCRIPT_DIR/icons/garuda-eagle.png" "$HOME/.local/share/icons/hicolor/512x512/apps/garuda-eagle.png" 2>/dev/null || true
     fi
     if [ -d "$SCRIPT_DIR/configs/kwin-scripts/dynamic-workspaces" ]; then
         mkdir -p "$HOME/.local/share/kwin/scripts/dynamic-workspaces"
@@ -85,7 +92,7 @@ apply_panels() {
     kwriteconfig6 --file plasmashellrc --group PlasmaViews --group "Panel 2" --key floating 1
     kwriteconfig6 --file plasmashellrc --group PlasmaViews --group "Panel 2" --key panelOpacity 2
     
-    # Position Kickoff at top-left corner (index 0) with Garuda icon
+    # Position Kickoff at top-left corner (index 0) with custom Garuda polygonal eagle icon
     qdbus6 org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell.evaluateScript "
 var p = panels();
 for (var i = 0; i < p.length; i++) {
@@ -97,7 +104,8 @@ for (var i = 0; i < p.length; i++) {
             k.index = 0;
             k.globalShortcut = 'Alt+F1';
             k.currentConfigGroup = ['General'];
-            k.writeConfig('icon', 'distributor-logo-garuda');
+            k.writeConfig('icon', 'garuda-eagle');
+            k.reloadConfig();
         }
     }
 }

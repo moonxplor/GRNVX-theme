@@ -181,6 +181,16 @@ try:
             dbus.Struct((dbus.Array([dbus.Int32(ALT_BASE + KEY_F4), dbus.Int32(0), dbus.Int32(0), dbus.Int32(0)], signature='i'),))
         ], signature='(ai)')
     )
+    # Super + Enter to Open Terminal
+    KEY_RETURN = 16777220
+    KEY_ENTER = 16777221
+    iface.setForeignShortcutKeys(
+        dbus.Array(['org.kde.konsole.desktop', '_launch', 'Konsole', 'Konsole'], signature='s'),
+        dbus.Array([
+            dbus.Struct((dbus.Array([dbus.Int32(META_BASE + KEY_RETURN), dbus.Int32(0), dbus.Int32(0), dbus.Int32(0)], signature='i'),)),
+            dbus.Struct((dbus.Array([dbus.Int32(META_BASE + KEY_ENTER), dbus.Int32(0), dbus.Int32(0), dbus.Int32(0)], signature='i'),))
+        ], signature='(ai)')
+    )
 except Exception:
     pass
 " 2>/dev/null || true

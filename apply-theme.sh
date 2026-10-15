@@ -95,6 +95,7 @@ for (var i = 0; i < p.length; i++) {
         if (widgets[j].type === 'org.kde.plasma.kickoff') {
             var k = widgets[j];
             k.index = 0;
+            k.globalShortcut = 'Alt+F1';
             k.currentConfigGroup = ['General'];
             k.writeConfig('icon', 'distributor-logo-garuda');
         }

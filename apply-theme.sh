@@ -89,6 +89,10 @@ apply_panels() {
         mkdir -p "$HOME/.local/share/kwin/scripts/dynamic-workspaces"
         cp -r "$SCRIPT_DIR/configs/kwin-scripts/dynamic-workspaces/"* "$HOME/.local/share/kwin/scripts/dynamic-workspaces/" 2>/dev/null || true
     fi
+    if [ -d "$SCRIPT_DIR/configs/desktoptheme" ]; then
+        mkdir -p "$HOME/.local/share/plasma/desktoptheme/default"
+        cp -r "$SCRIPT_DIR/configs/desktoptheme/"* "$HOME/.local/share/plasma/desktoptheme/default/" 2>/dev/null || true
+    fi
     if [ -d "$SCRIPT_DIR/configs/kitty" ]; then
         mkdir -p "$HOME/.config/kitty"
         cp -r "$SCRIPT_DIR/configs/kitty/"* "$HOME/.config/kitty/" 2>/dev/null || true
@@ -97,20 +101,41 @@ apply_panels() {
     kwriteconfig6 --file plasmashellrc --group PlasmaViews --group "Panel 2" --key floating 1
     kwriteconfig6 --file plasmashellrc --group PlasmaViews --group "Panel 2" --key panelOpacity 2
     
-    # Position Kickoff at top-left corner (index 0) with custom Garuda polygonal eagle icon
+    # Configure compact popup dimensions in appletsrc
+    kwriteconfig6 --file plasma-org.kde.plasma.desktop-appletsrc --group Containments --group 2 --group Applets --group 37 --key popupWidth 480
+    kwriteconfig6 --file plasma-org.kde.plasma.desktop-appletsrc --group Containments --group 2 --group Applets --group 37 --key popupHeight 400
+    kwriteconfig6 --file plasma-org.kde.plasma.desktop-appletsrc --group Containments --group 2 --group Applets --group 8 --key popupWidth 360
+    kwriteconfig6 --file plasma-org.kde.plasma.desktop-appletsrc --group Containments --group 2 --group Applets --group 8 --key popupHeight 340
+    kwriteconfig6 --file plasma-org.kde.plasma.desktop-appletsrc --group Containments --group 2 --group Applets --group 11 --key popupWidth 340
+    kwriteconfig6 --file plasma-org.kde.plasma.desktop-appletsrc --group Containments --group 2 --group Applets --group 11 --key popupHeight 300
+
+    # Configure Kickoff (icon, index, size) & Applets live
     qdbus6 org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell.evaluateScript "
 var p = panels();
 for (var i = 0; i < p.length; i++) {
     var panel = p[i];
     var widgets = panel.widgets();
     for (var j = 0; j < widgets.length; j++) {
-        if (widgets[j].type === 'org.kde.plasma.kickoff') {
-            var k = widgets[j];
-            k.index = 0;
-            k.globalShortcut = 'Alt+F1';
-            k.currentConfigGroup = ['General'];
-            k.writeConfig('icon', 'garuda-eagle');
-            k.reloadConfig();
+        var w = widgets[j];
+        if (w.type === 'org.kde.plasma.kickoff') {
+            w.index = 0;
+            w.globalShortcut = 'Alt+F1';
+            w.currentConfigGroup = ['General'];
+            w.writeConfig('icon', 'garuda-eagle');
+            w.currentConfigGroup = [];
+            w.writeConfig('popupWidth', 480);
+            w.writeConfig('popupHeight', 400);
+            w.reloadConfig();
+        } else if (w.type === 'org.kde.plasma.digitalclock') {
+            w.currentConfigGroup = [];
+            w.writeConfig('popupWidth', 360);
+            w.writeConfig('popupHeight', 340);
+            w.reloadConfig();
+        } else if (w.type === 'org.kde.plasma.systemtray') {
+            w.currentConfigGroup = [];
+            w.writeConfig('popupWidth', 340);
+            w.writeConfig('popupHeight', 300);
+            w.reloadConfig();
         }
     }
 }

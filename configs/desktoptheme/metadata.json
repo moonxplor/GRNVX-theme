@@ -1,0 +1,19 @@
+{
+    "KPlugin": {
+        "Authors": [
+            {
+                "Email": "moonxplor@garuda",
+                "Name": "Everforest Rice"
+            }
+        ],
+        "Category": "",
+        "Description": "Everforest Dark Green Desktop Theme",
+        "EnabledByDefault": true,
+        "Id": "default",
+        "License": "GPL",
+        "Name": "Everforest",
+        "Version": "6.0",
+        "Website": "https://garuda-linux.org/"
+    },
+    "X-Plasma-API": "5.0"
+}

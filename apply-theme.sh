@@ -89,6 +89,11 @@ apply_panels() {
         mkdir -p "$HOME/.local/share/kwin/scripts/dynamic-workspaces"
         cp -r "$SCRIPT_DIR/configs/kwin-scripts/dynamic-workspaces/"* "$HOME/.local/share/kwin/scripts/dynamic-workspaces/" 2>/dev/null || true
     fi
+    if [ -d "$SCRIPT_DIR/configs/kitty" ]; then
+        mkdir -p "$HOME/.config/kitty"
+        cp -r "$SCRIPT_DIR/configs/kitty/"* "$HOME/.config/kitty/" 2>/dev/null || true
+        killall -SIGUSR1 kitty 2>/dev/null || true
+    fi
     kwriteconfig6 --file plasmashellrc --group PlasmaViews --group "Panel 2" --key floating 1
     kwriteconfig6 --file plasmashellrc --group PlasmaViews --group "Panel 2" --key panelOpacity 2
     

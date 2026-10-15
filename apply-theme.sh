@@ -111,7 +111,8 @@ reconfigure_kwin() {
     echo "✨ Reconfiguring KWin window effects, launcher & dynamic workspace shortcuts..."
     kwriteconfig6 --file kwinrc --group Plugins --key desktopchangeosdEnabled false
     kwriteconfig6 --file kwinrc --group Plugins --key dynamic-workspacesEnabled true
-    kwriteconfig6 --file kwinrc --group ModifierOnlyShortcuts --key Meta "org.kde.plasmashell,/PlasmaShell,org.kde.PlasmaShell,activateLauncherMenu"
+    # Configure standalone Meta key to open Application Launcher (Plasma 6 native shortcut)
+    kwriteconfig6 --file kglobalshortcutsrc --group plasmashell --key "activate application launcher" "Meta\tAlt+F1,Meta\tAlt+F1,Activate Application Launcher"
     
     # Reload dynamic-workspaces KWin script
     qdbus6 org.kde.KWin /Scripting org.kde.kwin.Scripting.unloadScript "dynamic-workspaces" 2>/dev/null || true
@@ -152,6 +153,18 @@ try:
     iface.setForeignShortcutKeys(dbus.Array(['kwin', 'Window Quick Tile Right', '', ''], signature='s'), empty)
     iface.setForeignShortcutKeys(dbus.Array(['plasmashell', 'show-on-mouse-pos', '', ''], signature='s'), empty)
 
+    # Standalone Super (Meta) & Alt+F1 for Application Launcher
+    KEY_META = 16777250
+    ALT_BASE = 134217728
+    KEY_F1 = 16777264
+    iface.setForeignShortcutKeys(
+        dbus.Array(['plasmashell', 'activate application launcher', '', ''], signature='s'),
+        dbus.Array([
+            dbus.Struct((dbus.Array([dbus.Int32(KEY_META), dbus.Int32(0), dbus.Int32(0), dbus.Int32(0)], signature='i'),)),
+            dbus.Struct((dbus.Array([dbus.Int32(ALT_BASE + KEY_F1), dbus.Int32(0), dbus.Int32(0), dbus.Int32(0)], signature='i'),))
+        ], signature='(ai)')
+    )
+
     # Super + Arrows
     iface.setForeignShortcutKeys(dbus.Array(['kwin', 'Switch One Desktop to the Left', '', ''], signature='s'), left)
     iface.setForeignShortcutKeys(dbus.Array(['kwin', 'Switch One Desktop to the Right', '', ''], signature='s'), right)
@@ -171,7 +184,6 @@ try:
         iface.setForeignShortcutKeys(dbus.Array(['kwin', f'dynamic_workspace_move_{i}', '', ''], signature='s'), make_key(META_BASE + SHIFT_BASE + ord(str(i))))
 
     # Super + Q to Close Window/Tab
-    ALT_BASE = 134217728
     KEY_F4 = 16777267
     iface.setForeignShortcutKeys(dbus.Array(['plasmashell', 'manage activities', '', ''], signature='s'), empty)
     iface.setForeignShortcutKeys(

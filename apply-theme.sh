@@ -111,6 +111,10 @@ apply_panels() {
         cp -r "$SCRIPT_DIR/configs/kitty/"* "$HOME/.config/kitty/" 2>/dev/null || true
         killall -SIGUSR1 kitty 2>/dev/null || true
     fi
+    if [ -d "$SCRIPT_DIR/configs/fastfetch" ]; then
+        mkdir -p "$HOME/.config/fastfetch"
+        cp -r "$SCRIPT_DIR/configs/fastfetch/"* "$HOME/.config/fastfetch/" 2>/dev/null || true
+    fi
     if [ -d "$SCRIPT_DIR/configs/plasmoids" ]; then
         mkdir -p "$HOME/.local/share/plasma/plasmoids"
         cp -r "$SCRIPT_DIR/configs/plasmoids/"* "$HOME/.local/share/plasma/plasmoids/" 2>/dev/null || true

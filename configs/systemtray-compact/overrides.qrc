@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/qt/qml/plasma/applet/org/kde/plasma/systemtray">
+        <file alias="ExpandedRepresentation.qml">ExpandedRepresentation.qml</file>
+        <file alias="PlasmoidPopupsContainer.qml">PlasmoidPopupsContainer.qml</file>
+    </qresource>
+</RCC>

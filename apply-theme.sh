@@ -98,16 +98,50 @@ apply_panels() {
         cp -r "$SCRIPT_DIR/configs/kitty/"* "$HOME/.config/kitty/" 2>/dev/null || true
         killall -SIGUSR1 kitty 2>/dev/null || true
     fi
+    if [ -d "$SCRIPT_DIR/configs/plasmoids" ]; then
+        mkdir -p "$HOME/.local/share/plasma/plasmoids"
+        cp -r "$SCRIPT_DIR/configs/plasmoids/"* "$HOME/.local/share/plasma/plasmoids/" 2>/dev/null || true
+    fi
+    if [ -d "$SCRIPT_DIR/configs/qml" ]; then
+        mkdir -p "$HOME/.local/lib/qt6/qml/org/kde/plasma/core"
+        mkdir -p "$HOME/.local/lib/qt6/qml/org/kde/plasma/workspace/calendar"
+        cp -r "$SCRIPT_DIR/configs/qml/"* "$HOME/.local/lib/qt6/qml/" 2>/dev/null || true
+        ln -sf /usr/lib/qt6/qml/org/kde/plasma/core/libcorebindingsplugin.so "$HOME/.local/lib/qt6/qml/org/kde/plasma/core/libcorebindingsplugin.so" 2>/dev/null || true
+        cp -u /usr/lib/qt6/qml/org/kde/plasma/core/corebindingsplugin.qmltypes "$HOME/.local/lib/qt6/qml/org/kde/plasma/core/" 2>/dev/null || true
+        ln -sf /usr/lib/qt6/qml/org/kde/plasma/workspace/calendar/libcalendarplugin.so "$HOME/.local/lib/qt6/qml/org/kde/plasma/workspace/calendar/libcalendarplugin.so" 2>/dev/null || true
+        cp -u /usr/lib/qt6/qml/org/kde/plasma/workspace/calendar/calendarplugin.qmltypes "$HOME/.local/lib/qt6/qml/org/kde/plasma/workspace/calendar/" 2>/dev/null || true
+        cp -u /usr/lib/qt6/qml/org/kde/plasma/workspace/calendar/kde-qmlmodule.version "$HOME/.local/lib/qt6/qml/org/kde/plasma/workspace/calendar/" 2>/dev/null || true
+    fi
+    
+    # Configure System Tray compact sizing (~5cm x 5cm / 224x224 px)
+    if [ -d "$SCRIPT_DIR/configs/systemtray-compact" ] && [ -f "$SCRIPT_DIR/src/libplasma_rcc_hook.cpp" ]; then
+        echo "📦 Compiling System Tray compact popup overrides..."
+        mkdir -p "$HOME/.local/share/plasma" "$HOME/.local/lib" "$HOME/.config/environment.d"
+        /usr/lib/qt6/rcc --binary "$SCRIPT_DIR/configs/systemtray-compact/overrides.qrc" -o "$HOME/.local/share/plasma/overrides.rcc" 2>/dev/null || true
+        g++ -shared -fPIC -O2 -I/usr/include/qt6 -I/usr/include/qt6/QtCore -lQt6Core -ldl "$SCRIPT_DIR/src/libplasma_rcc_hook.cpp" -o "$HOME/.local/lib/libplasma_rcc_hook.so" 2>/dev/null || true
+        cat << 'ENVEOF' > "$HOME/.config/environment.d/10-plasma.conf"
+QML2_IMPORT_PATH=/home/moonxplor/.local/lib/qt6/qml:/usr/lib/qt6/qml
+QML_IMPORT_PATH=/home/moonxplor/.local/lib/qt6/qml:/usr/lib/qt6/qml
+LD_PRELOAD=/home/moonxplor/.local/lib/libplasma_rcc_hook.so
+QV4_FORCE_INTERPRETER=1
+QML_DISABLE_DISK_CACHE=1
+ENVEOF
+        systemctl --user import-environment LD_PRELOAD QV4_FORCE_INTERPRETER QML_DISABLE_DISK_CACHE 2>/dev/null || true
+    fi
+
     kwriteconfig6 --file plasmashellrc --group PlasmaViews --group "Panel 2" --key floating 1
     kwriteconfig6 --file plasmashellrc --group PlasmaViews --group "Panel 2" --key panelOpacity 2
     
-    # Configure compact popup dimensions in appletsrc
+    # Configure compact popup dimensions in appletsrc (Calendar & Tray Applets: 224x224 px ~ 5cm x 5cm)
     kwriteconfig6 --file plasma-org.kde.plasma.desktop-appletsrc --group Containments --group 2 --group Applets --group 37 --key popupWidth 480
     kwriteconfig6 --file plasma-org.kde.plasma.desktop-appletsrc --group Containments --group 2 --group Applets --group 37 --key popupHeight 400
-    kwriteconfig6 --file plasma-org.kde.plasma.desktop-appletsrc --group Containments --group 2 --group Applets --group 8 --key popupWidth 360
-    kwriteconfig6 --file plasma-org.kde.plasma.desktop-appletsrc --group Containments --group 2 --group Applets --group 8 --key popupHeight 340
-    kwriteconfig6 --file plasma-org.kde.plasma.desktop-appletsrc --group Containments --group 2 --group Applets --group 11 --key popupWidth 340
-    kwriteconfig6 --file plasma-org.kde.plasma.desktop-appletsrc --group Containments --group 2 --group Applets --group 11 --key popupHeight 300
+    kwriteconfig6 --file plasma-org.kde.plasma.desktop-appletsrc --group Containments --group 2 --group Applets --group 8 --key plugin org.kde.plasma.compactclock
+    kwriteconfig6 --file plasma-org.kde.plasma.desktop-appletsrc --group Containments --group 2 --group Applets --group 8 --key popupWidth 225
+    kwriteconfig6 --file plasma-org.kde.plasma.desktop-appletsrc --group Containments --group 2 --group Applets --group 8 --key popupHeight 225
+    kwriteconfig6 --file plasma-org.kde.plasma.desktop-appletsrc --group Containments --group 2 --group Applets --group 8 --group Configuration --key popupWidth 225
+    kwriteconfig6 --file plasma-org.kde.plasma.desktop-appletsrc --group Containments --group 2 --group Applets --group 8 --group Configuration --key popupHeight 225
+    kwriteconfig6 --file plasma-org.kde.plasma.desktop-appletsrc --group Containments --group 2 --group Applets --group 11 --key popupWidth 224
+    kwriteconfig6 --file plasma-org.kde.plasma.desktop-appletsrc --group Containments --group 2 --group Applets --group 11 --key popupHeight 224
 
     # Configure Kickoff (icon, index, size) & Applets live
     qdbus6 org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell.evaluateScript "
@@ -126,20 +160,24 @@ for (var i = 0; i < p.length; i++) {
             w.writeConfig('popupWidth', 480);
             w.writeConfig('popupHeight', 400);
             w.reloadConfig();
-        } else if (w.type === 'org.kde.plasma.digitalclock') {
+        } else if (w.type === 'org.kde.plasma.digitalclock' || w.type === 'org.kde.plasma.compactclock') {
             w.currentConfigGroup = [];
-            w.writeConfig('popupWidth', 360);
-            w.writeConfig('popupHeight', 340);
+            w.writeConfig('popupWidth', 225);
+            w.writeConfig('popupHeight', 225);
+            w.currentConfigGroup = ['Configuration'];
+            w.writeConfig('popupWidth', 225);
+            w.writeConfig('popupHeight', 225);
             w.reloadConfig();
         } else if (w.type === 'org.kde.plasma.systemtray') {
             w.currentConfigGroup = [];
-            w.writeConfig('popupWidth', 340);
-            w.writeConfig('popupHeight', 300);
+            w.writeConfig('popupWidth', 224);
+            w.writeConfig('popupHeight', 224);
             w.reloadConfig();
         }
     }
 }
 " 2>/dev/null || true
+
 
     qdbus6 luisbocanegra.panel.colorizer.c2.w10 /preset preset "$HOME/.config/panel-colorizer/presets/Everforest Waybar" 2>/dev/null || true
     qdbus6 luisbocanegra.panel.colorizer.c25.w26 /preset preset "$HOME/.config/panel-colorizer/presets/Everforest Dock" 2>/dev/null || true

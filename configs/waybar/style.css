@@ -66,7 +66,7 @@ window#waybar {
 }
 
 #pulseaudio {
-  color: #7fbbb3;
+  color: #39ff14;
 }
 
 #pulseaudio.muted {
@@ -75,7 +75,7 @@ window#waybar {
 }
 
 #network {
-  color: #a7c080;
+  color: #39ff14;
 }
 
 #network.disconnected {
@@ -83,11 +83,11 @@ window#waybar {
 }
 
 #battery {
-  color: #a7c080;
+  color: #39ff14;
 }
 
 #battery.charging {
-  color: #83c092;
+  color: #39ff14;
 }
 
 #battery.warning:not(.charging) {

@@ -93,6 +93,19 @@ apply_panels() {
         mkdir -p "$HOME/.local/share/plasma/desktoptheme/default"
         cp -r "$SCRIPT_DIR/configs/desktoptheme/"* "$HOME/.local/share/plasma/desktoptheme/default/" 2>/dev/null || true
     fi
+    if [ -d "$SCRIPT_DIR/configs/panel-colorizer" ]; then
+        mkdir -p "$HOME/.config/panel-colorizer/presets/Everforest Waybar"
+        cp -r "$SCRIPT_DIR/configs/panel-colorizer/Everforest Waybar/"* "$HOME/.config/panel-colorizer/presets/Everforest Waybar/" 2>/dev/null || true
+        if [ -f "$SCRIPT_DIR/configs/panel-colorizer/forceForegroundColor.json" ]; then
+            cp -f "$SCRIPT_DIR/configs/panel-colorizer/forceForegroundColor.json" "$HOME/.config/panel-colorizer/" 2>/dev/null || true
+            FORCE_FG=$(cat "$SCRIPT_DIR/configs/panel-colorizer/forceForegroundColor.json")
+            kwriteconfig6 --file plasma-org.kde.plasma.desktop-appletsrc --group Containments --group 2 --group Applets --group 10 --group Configuration --group General --key forceForegroundColor "$FORCE_FG" 2>/dev/null || true
+        fi
+    fi
+    if [ -d "$SCRIPT_DIR/configs/waybar" ]; then
+        mkdir -p "$HOME/.config/waybar"
+        cp -r "$SCRIPT_DIR/configs/waybar/"* "$HOME/.config/waybar/" 2>/dev/null || true
+    fi
     if [ -d "$SCRIPT_DIR/configs/kitty" ]; then
         mkdir -p "$HOME/.config/kitty"
         cp -r "$SCRIPT_DIR/configs/kitty/"* "$HOME/.config/kitty/" 2>/dev/null || true

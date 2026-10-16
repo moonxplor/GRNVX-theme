@@ -11,7 +11,7 @@
           "alpha": 0.18,
           "systemColor": "backgroundColor",
           "systemColorSet": "Window",
-          "custom": "#122211",
+          "custom": "#050a05",
           "list": [
             "#ED8796",
             "#A6DA95",
@@ -86,7 +86,7 @@
           }
         },
         "border": {
-          "enabled": false,
+          "enabled": true,
           "customSides": false,
           "custom": {
             "widths": {
@@ -114,14 +114,14 @@
               }
             }
           },
-          "width": 0,
+          "width": 1,
           "color": {
             "lightnessValue": 0.5,
             "saturationValue": 0.5,
-            "alpha": 1,
+            "alpha": 0.85,
             "systemColor": "highlightColor",
             "systemColorSet": "View",
-            "custom": "#ff6c06",
+            "custom": "#a7c080",
             "list": [
               "#ED8796",
               "#A6DA95",
@@ -224,7 +224,7 @@
           "alpha": 0.18,
           "systemColor": "highlightColor",
           "systemColorSet": "Window",
-          "custom": "#122211",
+          "custom": "#050a05",
           "list": [
             "#ED8796",
             "#A6DA95",
@@ -323,7 +323,7 @@
           "color": {
             "lightnessValue": 0.5,
             "saturationValue": 0.5,
-            "alpha": 0.5,
+            "alpha": 0.85,
             "systemColor": "backgroundColor",
             "systemColorSet": "Window",
             "custom": "#a7c080",
@@ -344,7 +344,7 @@
               "interval": 3000,
               "smoothing": 800
             },
-            "sourceType": 0,
+            "sourceType": 1,
             "enabled": true
           }
         },
@@ -429,7 +429,7 @@
           "alpha": 0.18,
           "systemColor": "backgroundColor",
           "systemColorSet": "Header",
-          "custom": "#122211",
+          "custom": "#050a05",
           "list": [
             "#ED8796",
             "#A6DA95",
@@ -527,7 +527,7 @@
           "color": {
             "lightnessValue": 0.5,
             "saturationValue": 0.5,
-            "alpha": 0.5,
+            "alpha": 0.85,
             "systemColor": "highlightColor",
             "systemColorSet": "View",
             "custom": "#a7c080",
@@ -548,7 +548,7 @@
               "interval": 3000,
               "smoothing": 800
             },
-            "sourceType": 0,
+            "sourceType": 1,
             "enabled": true
           }
         },

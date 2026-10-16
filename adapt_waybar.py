@@ -88,12 +88,18 @@ def adapt_to_wallpaper(wallpaper_path):
         p_norm["backgroundColor"]["custom"] = top_bg_hex
         p_norm["backgroundColor"]["alpha"] = top_alpha
 
-        # Widget pills inside top bar: matching adaptive tone and transparency
+        # Widget pills inside top bar: matching adaptive tone, transparency, and Everforest green border
         w_norm = wb_data["globalSettings"]["widgets"]["normal"]
         w_norm["backgroundColor"]["sourceType"] = 0
         w_norm["backgroundColor"]["custom"] = top_bg_hex
         w_norm["backgroundColor"]["alpha"] = top_alpha
         w_norm["blurBehind"] = True
+        w_norm["border"]["enabled"] = True
+        w_norm["border"]["width"] = 1
+        w_norm["border"]["color"]["enabled"] = True
+        w_norm["border"]["color"]["sourceType"] = 1
+        w_norm["border"]["color"]["custom"] = "#a7c080"
+        w_norm["border"]["color"]["alpha"] = 0.85
 
         if "trayWidgets" in wb_data["globalSettings"] and "normal" in wb_data["globalSettings"]["trayWidgets"]:
             t_norm = wb_data["globalSettings"]["trayWidgets"]["normal"]
@@ -101,6 +107,12 @@ def adapt_to_wallpaper(wallpaper_path):
             t_norm["backgroundColor"]["custom"] = top_bg_hex
             t_norm["backgroundColor"]["alpha"] = top_alpha
             t_norm["blurBehind"] = True
+            t_norm["border"]["enabled"] = True
+            t_norm["border"]["width"] = 1
+            t_norm["border"]["color"]["enabled"] = True
+            t_norm["border"]["color"]["sourceType"] = 1
+            t_norm["border"]["color"]["custom"] = "#a7c080"
+            t_norm["border"]["color"]["alpha"] = 0.85
 
         if "nativePanel" in wb_data["globalSettings"]:
             wb_data["globalSettings"]["nativePanel"]["background"]["enabled"] = True

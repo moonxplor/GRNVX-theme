@@ -1,0 +1,121 @@
+/* Everforest Dark Waybar Styling */
+
+* {
+  border: none;
+  border-radius: 0;
+  font-family: "JetBrainsMono Nerd Font", "Inter", sans-serif;
+  font-size: 13px;
+  font-weight: bold;
+  min-height: 0;
+}
+
+window#waybar {
+  background: transparent;
+  color: #d3c6aa;
+}
+
+/* Base pill module styling */
+#custom-garuda,
+#cpu,
+#memory,
+#mpris,
+#clock,
+#pulseaudio,
+#network,
+#battery,
+#tray,
+#custom-power {
+  background: rgba(5, 10, 5, 0.18);
+  color: #d3c6aa;
+  padding: 4px 12px;
+  margin: 3px 2px;
+  border-radius: 10px;
+  border: 1px solid #a7c080;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  transition: all 0.2s ease-in-out;
+}
+
+#custom-garuda {
+  color: #a7c080;
+  font-size: 15px;
+  padding: 4px 10px;
+  border: 1px solid #a7c080;
+}
+
+#custom-garuda:hover {
+  background: #a7c080;
+  color: #1e2326;
+}
+
+#clock {
+  color: #dbbc7f;
+  border-color: #a7c080;
+  font-size: 13px;
+}
+
+#clock:hover {
+  border-color: #a7c080;
+}
+
+#cpu {
+  color: #a7c080;
+}
+
+#memory {
+  color: #83c092;
+}
+
+#pulseaudio {
+  color: #7fbbb3;
+}
+
+#pulseaudio.muted {
+  color: #e67e80;
+  border-color: rgba(230, 126, 128, 0.4);
+}
+
+#network {
+  color: #a7c080;
+}
+
+#network.disconnected {
+  color: #e67e80;
+}
+
+#battery {
+  color: #a7c080;
+}
+
+#battery.charging {
+  color: #83c092;
+}
+
+#battery.warning:not(.charging) {
+  color: #dbbc7f;
+  border-color: rgba(219, 188, 127, 0.6);
+}
+
+#battery.critical:not(.charging) {
+  color: #e67e80;
+  border-color: #e67e80;
+  animation-name: blink;
+  animation-duration: 0.5s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+
+#custom-power {
+  color: #e67e80;
+  padding: 4px 10px;
+  border-color: rgba(230, 126, 128, 0.4);
+}
+
+#custom-power:hover {
+  background: #e67e80;
+  color: #1e2326;
+}
+
+#tray {
+  padding: 4px 8px;
+}

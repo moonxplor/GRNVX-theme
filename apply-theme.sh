@@ -113,12 +113,27 @@ apply_panels() {
         cp -u /usr/lib/qt6/qml/org/kde/plasma/workspace/calendar/kde-qmlmodule.version "$HOME/.local/lib/qt6/qml/org/kde/plasma/workspace/calendar/" 2>/dev/null || true
     fi
     
-    # Configure System Tray compact sizing (~5cm x 5cm / 224x224 px)
+    # Configure System Tray compact sizing (~5cm x 5cm / 224x224 px) & Display Adjustments
     if [ -d "$SCRIPT_DIR/configs/systemtray-compact" ] && [ -f "$SCRIPT_DIR/src/libplasma_rcc_hook.cpp" ]; then
-        echo "📦 Compiling System Tray compact popup overrides..."
-        mkdir -p "$HOME/.local/share/plasma" "$HOME/.local/lib" "$HOME/.config/environment.d"
+        echo "📦 Compiling System Tray compact popup overrides & Display Adjuster..."
+        mkdir -p "$HOME/.local/share/plasma" "$HOME/.local/lib" "$HOME/.config/environment.d" "$HOME/.local/bin" "$HOME/.config/autostart"
+        
+        # Install display adjustment script and autostart
+        if [ -f "$SCRIPT_DIR/bin/plasma-apply-display-adjustments" ]; then
+            cp -f "$SCRIPT_DIR/bin/plasma-apply-display-adjustments" "$HOME/.local/bin/"
+            chmod +x "$HOME/.local/bin/plasma-apply-display-adjustments"
+        fi
+        if [ -f "$SCRIPT_DIR/configs/plasma-display-adjustments.desktop" ]; then
+            cp -f "$SCRIPT_DIR/configs/plasma-display-adjustments.desktop" "$HOME/.config/autostart/"
+        fi
+
+        # Compile RCC binary overrides
         /usr/lib/qt6/rcc --binary "$SCRIPT_DIR/configs/systemtray-compact/overrides.qrc" -o "$HOME/.local/share/plasma/overrides.rcc" 2>/dev/null || true
-        g++ -shared -fPIC -O2 -I/usr/include/qt6 -I/usr/include/qt6/QtCore -lQt6Core -ldl "$SCRIPT_DIR/src/libplasma_rcc_hook.cpp" -o "$HOME/.local/lib/libplasma_rcc_hook.so" 2>/dev/null || true
+        
+        # Compile C++ QML DisplayAdjuster & RCC hook
+        /usr/lib/qt6/moc "$SCRIPT_DIR/src/libplasma_rcc_hook.cpp" -o "$SCRIPT_DIR/src/libplasma_rcc_hook.moc" 2>/dev/null || true
+        g++ -shared -fPIC -O2 $(pkg-config --cflags --libs Qt6Core Qt6Qml 2>/dev/null) "$SCRIPT_DIR/src/libplasma_rcc_hook.cpp" -o "$HOME/.local/lib/libplasma_rcc_hook.so" 2>/dev/null || true
+        
         cat << 'ENVEOF' > "$HOME/.config/environment.d/10-plasma.conf"
 QML2_IMPORT_PATH=/home/moonxplor/.local/lib/qt6/qml:/usr/lib/qt6/qml
 QML_IMPORT_PATH=/home/moonxplor/.local/lib/qt6/qml:/usr/lib/qt6/qml

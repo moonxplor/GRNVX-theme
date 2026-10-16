@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Plasma Display Adjustments
+Exec=/home/moonxplor/.local/bin/plasma-apply-display-adjustments
+Hidden=false
+NoDisplay=true
+X-GNOME-Autostart-enabled=true
+StartupNotify=false
+Terminal=false

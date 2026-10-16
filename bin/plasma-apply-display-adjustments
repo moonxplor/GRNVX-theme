@@ -1,0 +1,139 @@
+#!/usr/bin/env python3
+"""
+Garuda Linux Everforest - Display Adjustments Engine
+Handles real-time Contrast, Sharpness, and Vividness adjustments via LittleCMS & KScreen.
+"""
+
+import sys
+import os
+import json
+import argparse
+import ctypes
+import subprocess
+
+CONFIG_PATH = os.path.expanduser("~/.config/display-adjustments.json")
+ICC_PATH = os.path.expanduser("~/.local/share/plasma/display_adjusted.icc")
+
+DEFAULT_SETTINGS = {
+    "contrast": 50,
+    "sharpness": 50,
+    "vividness": 50
+}
+
+def load_settings():
+    if os.path.exists(CONFIG_PATH):
+        try:
+            with open(CONFIG_PATH, "r") as f:
+                return {**DEFAULT_SETTINGS, **json.load(f)}
+        except Exception:
+            pass
+    return DEFAULT_SETTINGS.copy()
+
+def save_settings(s):
+    os.makedirs(os.path.dirname(CONFIG_PATH), exist_ok=True)
+    with open(CONFIG_PATH, "w") as f:
+        json.dump(s, f, indent=2)
+
+def apply_adjustments(contrast, sharpness, vividness):
+    # Save settings
+    settings = {"contrast": contrast, "sharpness": sharpness, "vividness": vividness}
+    save_settings(settings)
+
+    # If neutral (contrast=50, vividness=50), revert to native sRGB
+    if contrast == 50 and vividness == 50:
+        subprocess.run(["kscreen-doctor", "output.eDP-1.colorProfileSource.sRGB"],
+                       stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        return
+
+    try:
+        lcms = ctypes.CDLL("liblcms2.so")
+    except Exception:
+        return
+
+    class cmsCIExyY(ctypes.Structure):
+        _fields_ = [("x", ctypes.c_double), ("y", ctypes.c_double), ("Y", ctypes.c_double)]
+
+    class cmsCIExyYTRIPLE(ctypes.Structure):
+        _fields_ = [("Red", cmsCIExyY), ("Green", cmsCIExyY), ("Blue", cmsCIExyY)]
+
+    # D65 white point
+    d65 = cmsCIExyY(0.3127, 0.3290, 1.0)
+
+    # Base sRGB primaries
+    # Contrast: map 0..100 to gamma (1.0 .. 3.2, 50 -> 2.2)
+    gamma_val = 1.0 + (contrast / 100.0) * 2.4
+
+    # Vividness / Saturation factor: 50 -> 1.0 (sRGB)
+    # <50 -> desaturates toward white point, >50 -> expands primaries
+    factor = 0.5 + (vividness / 100.0) * 1.0
+
+    def scale_primary(px, py):
+        dx = px - d65.x
+        dy = py - d65.y
+        return cmsCIExyY(d65.x + dx * factor, d65.y + dy * factor, 1.0)
+
+    primaries = cmsCIExyYTRIPLE(
+        Red=scale_primary(0.6400, 0.3300),
+        Green=scale_primary(0.3000, 0.6000),
+        Blue=scale_primary(0.1500, 0.0600)
+    )
+
+    lcms.cmsBuildGamma.argtypes = [ctypes.c_void_p, ctypes.c_double]
+    lcms.cmsBuildGamma.restype = ctypes.c_void_p
+
+    gamma_curve = lcms.cmsBuildGamma(None, gamma_val)
+    curves = (ctypes.c_void_p * 3)(gamma_curve, gamma_curve, gamma_curve)
+
+    lcms.cmsCreateRGBProfileTHR.argtypes = [
+        ctypes.c_void_p,
+        ctypes.POINTER(cmsCIExyY),
+        ctypes.POINTER(cmsCIExyYTRIPLE),
+        ctypes.POINTER(ctypes.c_void_p)
+    ]
+    lcms.cmsCreateRGBProfileTHR.restype = ctypes.c_void_p
+
+    h_prof = lcms.cmsCreateRGBProfileTHR(None, ctypes.byref(d65), ctypes.byref(primaries), curves)
+    if not h_prof:
+        return
+
+    os.makedirs(os.path.dirname(ICC_PATH), exist_ok=True)
+    lcms.cmsSaveProfileToFile.argtypes = [ctypes.c_void_p, ctypes.c_char_p]
+    lcms.cmsSaveProfileToFile.restype = ctypes.c_bool
+
+    ok = lcms.cmsSaveProfileToFile(h_prof, ICC_PATH.encode("utf-8"))
+
+    lcms.cmsFreeToneCurve.argtypes = [ctypes.c_void_p]
+    lcms.cmsFreeToneCurve(gamma_curve)
+    lcms.cmsCloseProfile.argtypes = [ctypes.c_void_p]
+    lcms.cmsCloseProfile(h_prof)
+
+    if ok:
+        cmd = [
+            "kscreen-doctor",
+            f'output.eDP-1.iccprofile."{ICC_PATH}"',
+            "output.eDP-1.colorProfileSource.ICC"
+        ]
+        subprocess.run(" ".join(cmd), shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
+def main():
+    parser = argparse.ArgumentParser(description="Display Adjustments Engine")
+    parser.add_argument("--contrast", type=int, default=None)
+    parser.add_argument("--sharpness", type=int, default=None)
+    parser.add_argument("--vividness", type=int, default=None)
+    parser.add_argument("--get", action="store_true")
+
+    args = parser.parse_args()
+    current = load_settings()
+
+    if args.get:
+        print(json.dumps(current))
+        return
+
+    c = args.contrast if args.contrast is not None else current["contrast"]
+    s = args.sharpness if args.sharpness is not None else current["sharpness"]
+    v = args.vividness if args.vividness is not None else current["vividness"]
+
+    apply_adjustments(c, s, v)
+
+if __name__ == "__main__":
+    main()

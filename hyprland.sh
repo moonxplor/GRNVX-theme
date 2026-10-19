@@ -8,6 +8,8 @@
 
 set -e
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
 echo "🌲 [1/4] Installing Hyprland, Quickshell, Hyprpaper, and Thunar..."
 sudo pacman -S --needed \
     hyprland \
@@ -46,6 +48,11 @@ fi
 if ! grep -q 'export FILEMANAGER="thunar"' "$HOME/.bashrc" 2>/dev/null; then
     echo 'export FILEMANAGER="thunar"' >> "$HOME/.bashrc"
 fi
+
+echo "⚙️ [3.5/4] Deploying Hyprland and Quickshell configurations..."
+mkdir -p "$HOME/.config/hypr" "$HOME/.config/quickshell"
+cp -r "$SCRIPT_DIR/configs/hypr/"* "$HOME/.config/hypr/"
+cp -r "$SCRIPT_DIR/configs/quickshell/"* "$HOME/.config/quickshell/"
 
 echo "✨ [4/4] Verifying Configuration..."
 echo "  • Hyprland config:  $HOME/.config/hypr/hyprland.conf"

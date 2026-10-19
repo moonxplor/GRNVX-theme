@@ -1,4 +1,4 @@
-# 🌲 GRNVX-theme
+# GRNVX-theme
 
 > **A minimal, cohesive Everforest green rice for Garuda Linux & Arch Linux.**  
 > Crafted with a Waybar-style pill topbar, custom status icons, smooth workspace navigation, and curated wallpapers for both **KDE Plasma 6** and **Hyprland**.
@@ -104,5 +104,3 @@ If migrating to standalone Hyprland:
 
 ## 📜 License
 MIT License. Feel free to use, modify, and rice your setup!
-# GRNVX-theme
-# GRNVX-theme

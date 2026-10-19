@@ -5,6 +5,38 @@ import QtQuick.Layouts
 
 PanelWindow {
     id: root
+
+    // Function to dynamically get open application logos for each workspace
+    function getAppLogos(wsId) {
+        try {
+            if (!Hyprland.clients || !Hyprland.clients.values) return "";
+            var icons = [];
+            var seen = {};
+            for (var i = 0; i < Hyprland.clients.values.length; i++) {
+                var client = Hyprland.clients.values[i];
+                if (client && client.workspace && client.workspace.id === wsId) {
+                    var cls = (client.class || "").toLowerCase();
+                    var icon = "";
+                    if (cls.indexOf("kitty") !== -1) icon = "󰄛";
+                    else if (cls.indexOf("discord") !== -1) icon = "󰙯";
+                    else if (cls.indexOf("brave") !== -1 || cls.indexOf("firefox") !== -1 || cls.indexOf("browser") !== -1) icon = "󰈹";
+                    else if (cls.indexOf("thunar") !== -1) icon = "󰉋";
+                    else if (cls.indexOf("code") !== -1) icon = "󰆍";
+                    else if (cls.indexOf("telegram") !== -1 || cls.indexOf("whatsapp") !== -1) icon = "󰖣";
+                    else if (cls.indexOf("spotify") !== -1) icon = "󰓇";
+                    else icon = "󰖲";
+
+                    if (icon && !seen[icon]) {
+                        seen[icon] = true;
+                        icons.push(icon);
+                    }
+                }
+            }
+            return icons.length > 0 ? " " + icons.join(" ") : "";
+        } catch (e) {
+            return "";
+        }
+    }
     
     // Top bar positioning
     anchors {
@@ -59,38 +91,6 @@ PanelWindow {
                     }
                 }
 
-                // Function to dynamically get open application logos for each workspace
-                function getAppLogos(wsId) {
-                    try {
-                        if (!Hyprland.clients || !Hyprland.clients.values) return "";
-                        var icons = [];
-                        var seen = {};
-                        for (var i = 0; i < Hyprland.clients.values.length; i++) {
-                            var client = Hyprland.clients.values[i];
-                            if (client && client.workspace && client.workspace.id === wsId) {
-                                var cls = (client.class || "").toLowerCase();
-                                var icon = "";
-                                if (cls.indexOf("kitty") !== -1) icon = "󰄛";
-                                else if (cls.indexOf("discord") !== -1) icon = "󰙯";
-                                else if (cls.indexOf("brave") !== -1 || cls.indexOf("firefox") !== -1 || cls.indexOf("browser") !== -1) icon = "󰈹";
-                                else if (cls.indexOf("thunar") !== -1) icon = "󰉋";
-                                else if (cls.indexOf("code") !== -1) icon = "󰆍";
-                                else if (cls.indexOf("telegram") !== -1 || cls.indexOf("whatsapp") !== -1) icon = "󰖣";
-                                else if (cls.indexOf("spotify") !== -1) icon = "󰓇";
-                                else icon = "󰖲";
-
-                                if (icon && !seen[icon]) {
-                                    seen[icon] = true;
-                                    icons.push(icon);
-                                }
-                            }
-                        }
-                        return icons.length > 0 ? " " + icons.join(" ") : "";
-                    } catch (e) {
-                        return "";
-                    }
-                }
-
                 // Workspace Pills Repeater: Numbers + Dynamic App Logos
                 Repeater {
                     model: [1, 2, 3, 4, 5, 6, 7]
@@ -98,7 +98,7 @@ PanelWindow {
                     Rectangle {
                         id: wsBtn
                         property bool isFocused: Hyprland.focusedWorkspace && Hyprland.focusedWorkspace.id === modelData
-                        property string appLogos: getAppLogos(modelData)
+                        property string appLogos: root.getAppLogos(modelData)
                         
                         implicitWidth: wsText.implicitWidth + 14
                         height: 24

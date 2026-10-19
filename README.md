@@ -1,13 +1,13 @@
 # GRNVX-theme
 
-> **A minimal, cohesive Everforest green rice for Garuda Linux & Arch Linux.**  
+> **A minimal, cohesive green rice for Garuda Linux & Arch Linux.**  
 > Crafted with a Waybar-style pill topbar, custom status icons, smooth workspace navigation, and curated wallpapers for both **KDE Plasma 6** and **Hyprland**.
 
 ---
 
 ## ✨ Features
 
-- **Everforest Dark Palette**: Deep earthy tones (`#2d353b`, `#232a2e`) balanced with soft sage (`#a7c080`) and calm cyan (`#70c0ba`) accents.
+- ** Dark Palette**: Deep earthy tones (`#2d353b`, `#232a2e`) balanced with soft sage (`#a7c080`) and calm cyan (`#70c0ba`) accents.
 - **Waybar Aesthetic on Plasma 6**: Floating top pill bar and dock powered by `panel-colorizer` with subtle borders and shadows.
   - **Top-Left App Launcher**: Sleek Garuda-branded launcher pill anchored at the far top-left corner (`x=0`), triggered by standalone <kbd>Super</kbd>.
   - **Dynamic Workspaces**: Workspaces expand seamlessly on demand; pressing <kbd>Super</kbd> + <kbd>1</kbd>..<kbd>9</kbd> jumps to that workspace and auto-creates it if it doesn't already exist.

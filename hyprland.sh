@@ -18,7 +18,12 @@ sudo pacman -S --needed \
     thunar \
     thunar-archive-plugin \
     tumbler \
-    xdg-desktop-portal-hyprland
+    xdg-desktop-portal-hyprland \
+    rofi \
+    network-manager-applet \
+    grim \
+    slurp \
+    wl-clipboard
 
 echo "🗑️ [2/4] Removing Dolphin and Konsole..."
 # Remove dolphin and its plugins/service menus, and konsole
@@ -50,9 +55,13 @@ if ! grep -q 'export FILEMANAGER="thunar"' "$HOME/.bashrc" 2>/dev/null; then
 fi
 
 echo "⚙️ [3.5/4] Deploying Hyprland and Quickshell configurations..."
-mkdir -p "$HOME/.config/hypr" "$HOME/.config/quickshell"
+mkdir -p "$HOME/.config/hypr" "$HOME/.config/quickshell" "$HOME/.local/bin"
 cp -r "$SCRIPT_DIR/configs/hypr/"* "$HOME/.config/hypr/"
 cp -r "$SCRIPT_DIR/configs/quickshell/"* "$HOME/.config/quickshell/"
+if [ -f "$SCRIPT_DIR/bin/hypr-status.sh" ]; then
+    cp -f "$SCRIPT_DIR/bin/hypr-status.sh" "$HOME/.local/bin/"
+    chmod +x "$HOME/.local/bin/hypr-status.sh"
+fi
 
 echo "✨ [4/4] Verifying Configuration..."
 echo "  • Hyprland config:  $HOME/.config/hypr/hyprland.conf"

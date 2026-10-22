@@ -10,7 +10,7 @@ set -e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-echo "🌲 [1/4] Installing Hyprland, Quickshell, Hyprpaper, and Thunar..."
+echo " [1/4] Installing Hyprland, Quickshell, Hyprpaper, and Thunar..."
 sudo pacman -S --needed \
     hyprland \
     quickshell \
@@ -35,7 +35,7 @@ else
     echo "✓ Konsole and Dolphin already removed."
 fi
 
-echo "📁 [3/4] Setting Thunar and Kitty as system defaults..."
+echo "[3/4] Setting Thunar and Kitty as system defaults..."
 xdg-mime default thunar.desktop inode/directory
 xdg-settings set default-web-browser "${BROWSER:-firefox.desktop}" 2>/dev/null || true
 
@@ -54,7 +54,7 @@ if ! grep -q 'export FILEMANAGER="thunar"' "$HOME/.bashrc" 2>/dev/null; then
     echo 'export FILEMANAGER="thunar"' >> "$HOME/.bashrc"
 fi
 
-echo "⚙️ [3.5/4] Deploying Hyprland and Quickshell configurations..."
+echo " [3.5/4] Deploying Hyprland and Quickshell configurations..."
 mkdir -p "$HOME/.config/hypr" "$HOME/.config/quickshell" "$HOME/.local/bin"
 cp -r "$SCRIPT_DIR/configs/hypr/"* "$HOME/.config/hypr/"
 cp -r "$SCRIPT_DIR/configs/quickshell/"* "$HOME/.config/quickshell/"
@@ -63,7 +63,7 @@ if [ -f "$SCRIPT_DIR/bin/hypr-status.sh" ]; then
     chmod +x "$HOME/.local/bin/hypr-status.sh"
 fi
 
-echo "✨ [4/4] Verifying Configuration..."
+echo " [4/4] Verifying Configuration..."
 echo "  • Hyprland config:  $HOME/.config/hypr/hyprland.conf"
 echo "  • Quickshell bar:   $HOME/.config/quickshell/shell.qml"
 echo "  • Hyprpaper config: $HOME/.config/hypr/hyprpaper.conf"
@@ -72,8 +72,8 @@ echo "  • Default files:    $(xdg-mime query default inode/directory 2>/dev/nu
 
 echo ""
 echo "=================================================================="
-echo "🎉 Hyprland + Quickshell Everforest Rice is fully installed!"
-echo "👉 To start Hyprland now:"
+echo " Hyprland + Quickshell Everforest Rice is fully installed!"
+echo " To start Hyprland now:"
 echo "   1. Log out of Plasma (Super -> Leave -> Log Out, or SDDM)"
 echo "   2. In the bottom-left of the SDDM login screen, select 'Hyprland'"
 echo "   3. Log in to enter your new smooth Everforest Hyprland desktop!"

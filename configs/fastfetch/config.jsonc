@@ -36,67 +36,67 @@
     },
     {
       "type": "os",
-      "key": "  󰣇 OS",
+      "key": "  󰣇",
       "keyColor": "green"
     },
     {
       "type": "kernel",
-      "key": "  󰌽 Kernel",
+      "key": "  󰌽",
       "keyColor": "green"
     },
     {
       "type": "uptime",
-      "key": "  󱎫 Uptime",
+      "key": "  󱎫",
       "keyColor": "green"
     },
     {
       "type": "packages",
-      "key": "  󰏖 Packages",
+      "key": "  󰏖",
       "keyColor": "green"
     },
     {
       "type": "shell",
-      "key": "  󰞷 Shell",
+      "key": "  󰞷",
       "keyColor": "green"
     },
     {
       "type": "de",
-      "key": "  󰧨 Desktop",
+      "key": "  󰧨",
       "keyColor": "bright_green"
     },
     {
       "type": "wm",
-      "key": "  󱂬 Window Mgr",
+      "key": "  󱂬",
       "keyColor": "bright_green"
     },
     {
       "type": "theme",
-      "key": "  󰉼 Palette",
+      "key": "  󰉼",
       "keyColor": "bright_green"
     },
     {
       "type": "terminal",
-      "key": "  󰞌 Terminal",
+      "key": "  󰞌",
       "keyColor": "bright_green"
     },
     {
       "type": "cpu",
-      "key": "  󰻠 CPU",
+      "key": "  󰻠",
       "keyColor": "yellow"
     },
     {
       "type": "gpu",
-      "key": "  󰢮 GPU",
+      "key": "  󰢮",
       "keyColor": "yellow"
     },
     {
       "type": "memory",
-      "key": "  󰍛 Memory",
+      "key": "  󰍛",
       "keyColor": "yellow"
     },
     {
       "type": "battery",
-      "key": "  󰁹 Battery",
+      "key": "  󰁹",
       "keyColor": "yellow"
     },
     {

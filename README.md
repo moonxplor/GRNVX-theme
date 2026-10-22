@@ -5,7 +5,7 @@
 
 ---
 
-## ✨ Features
+##  Features
 
 - ** Dark Palette**: Deep earthy tones (`#2d353b`, `#232a2e`) balanced with soft sage (`#a7c080`) and calm cyan (`#70c0ba`) accents.
 - **Waybar Aesthetic on Plasma 6**: Floating top pill bar and dock powered by `panel-colorizer` with subtle borders and shadows.
@@ -27,7 +27,7 @@
 
 ---
 
-## 📁 Repository Structure
+##  Repository Structure
 
 ```text
 GRNVX-theme/
@@ -102,5 +102,5 @@ If migrating to standalone Hyprland:
 
 ---
 
-## 📜 License
+##  License
 MIT License. Feel free to use, modify, and rice your setup!

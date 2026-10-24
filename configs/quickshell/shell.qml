@@ -136,20 +136,24 @@ PanelWindow {
                     MouseArea {
                         anchors.fill: parent
                         cursorShape: Qt.PointingHandCursor
-                        onClicked: Hyprland.dispatch("exec rofi -show drun || wofi --show drun")
+                        onClicked: Hyprland.dispatch("exec ~/.local/bin/hypr-launcher.sh")
                     }
                 }
 
-                // Workspace Pills Repeater: Numbers + Dynamic App Logos
+                // Workspace Pills Repeater: Dynamically shows open & active workspaces
                 Repeater {
-                    model: [1, 2, 3, 4, 5, 6, 7]
+                    model: Hyprland.workspaces
 
                     Rectangle {
                         id: wsBtn
-                        property bool isFocused: Hyprland.focusedWorkspace && Hyprland.focusedWorkspace.id === modelData
-                        property string appLogos: root.getAppLogos(modelData)
+                        required property var modelData
+
+                        visible: modelData && modelData.id > 0
+                        property bool isFocused: Hyprland.focusedWorkspace && Hyprland.focusedWorkspace.id === modelData.id
+                        property string appLogos: modelData ? root.getAppLogos(modelData.id) : ""
                         
-                        implicitWidth: wsText.implicitWidth + 14
+                        implicitWidth: visible ? wsText.implicitWidth + 14 : 0
+                        implicitHeight: visible ? 24 : 0
                         height: 24
                         radius: 6
                         color: isFocused ? "#35a7c080" : "transparent"
@@ -159,7 +163,7 @@ PanelWindow {
                         Text {
                             id: wsText
                             anchors.centerIn: parent
-                            text: modelData + wsBtn.appLogos
+                            text: (modelData && modelData.name !== "" ? modelData.name : (modelData ? modelData.id : "")) + wsBtn.appLogos
                             font.family: "JetBrainsMono Nerd Font"
                             font.bold: isFocused
                             font.pixelSize: 12
@@ -170,7 +174,11 @@ PanelWindow {
                             anchors.fill: parent
                             cursorShape: Qt.PointingHandCursor
                             onClicked: {
-                                Hyprland.dispatch("workspace " + modelData)
+                                if (modelData && typeof modelData.activate === "function") {
+                                    modelData.activate();
+                                } else if (modelData) {
+                                    Hyprland.dispatch("workspace " + modelData.id);
+                                }
                             }
                         }
                     }
@@ -482,30 +490,6 @@ PanelWindow {
                     }
                 }
 
-                // 9. Close Window Button (Far Right)
-                Rectangle {
-                    width: 26
-                    height: 24
-                    radius: 6
-                    color: "#35e67e80"
-                    border.color: "#e67e80"
-                    border.width: 1
-
-                    Text {
-                        anchors.centerIn: parent
-                        text: "✕"
-                        font.family: "JetBrainsMono Nerd Font"
-                        font.pixelSize: 11
-                        font.bold: true
-                        color: "#e67e80"
-                    }
-
-                    MouseArea {
-                        anchors.fill: parent
-                        cursorShape: Qt.PointingHandCursor
-                        onClicked: Hyprland.dispatch("killactive")
-                    }
-                }
             }
         }
     }

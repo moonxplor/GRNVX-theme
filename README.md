@@ -43,7 +43,9 @@ GRNVX-theme/
 ├── hyprland.sh          # Hyprland + Quickshell standalone installer & config
 ├── adapt_waybar.py      # Palette extraction script matching bar colors to wallpaper
 ├── bin/
-│   └── hypr-status.sh   # High-speed status telemetry provider for Quickshell
+│   ├── hypr-status.sh   # High-speed status telemetry provider for Quickshell
+│   ├── hypr-launcher.sh # Application launcher dispatcher (rofi/wofi/krunner fallback)
+│   └── hypr-screenshot.sh # Screenshot dispatcher (grim+slurp / spectacle fallback)
 ├── configs/
 │   ├── kwin-scripts/    # Dynamic workspaces KWin 6 automation script
 │   ├── panel-colorizer/ # 'Everforest Waybar' and 'Everforest Dock' presets
@@ -126,25 +128,26 @@ Or if migrating from KDE Plasma and purging Plasma completely:
 
 | Shortcut | Action |
 | :--- | :--- |
+| <kbd>Super</kbd> *(Tap)* | **Open / Toggle App Launcher** (Rofi / Wofi / KRunner) |
+| <kbd>Super</kbd> + <kbd>Space</kbd> | Open / Toggle App Launcher |
 | <kbd>Super</kbd> + <kbd>Return</kbd> | Launch Kitty Terminal |
-| <kbd>Super</kbd> + <kbd>Space</kbd> | Open App Launcher (Rofi) |
 | <kbd>Super</kbd> + <kbd>E</kbd> | Open File Manager (Thunar) |
-| <kbd>Super</kbd> + <kbd>D</kbd> | Open Web Browser (Firefox) |
+| <kbd>Super</kbd> + <kbd>D</kbd> | Open Web Browser (Brave / Firefox) |
 | <kbd>Super</kbd> + <kbd>Q</kbd> *(or <kbd>Super</kbd> + <kbd>C</kbd>)* | **Close Active Window** |
 | <kbd>Super</kbd> + <kbd>F</kbd> | Toggle Fullscreen |
 | <kbd>Super</kbd> + <kbd>V</kbd> | Toggle Floating Mode |
 | <kbd>Super</kbd> + <kbd>S</kbd> | Toggle Dwindle Split Layout |
 | <kbd>Super</kbd> + <kbd>1</kbd> .. <kbd>7</kbd> | Switch to Workspace 1 through 7 |
-| <kbd>Super</kbd> + <kbd>Shift</kbd> + <kbd>1</kbd> .. <kbd>7</kbd> | Move Window to Workspace 1 through 7 |
+| <kbd>Super</kbd> + <kbd>Shift</kbd> + <kbd>1</kbd> .. <kbd>7</kbd> | Move Active Window to Workspace 1 through 7 |
 | <kbd>Super</kbd> + <kbd>→</kbd> / <kbd>←</kbd> | Switch to Next / Previous Workspace |
 | <kbd>Super</kbd> + <kbd>Shift</kbd> + <kbd>→</kbd> / <kbd>←</kbd> | Move Active Window to Next / Previous Workspace |
-| <kbd>Super</kbd> + <kbd>H</kbd> / <kbd>J</kbd> / <kbd>K</kbd> / <kbd>L</kbd> | Move Focus Left / Down / Up / Right (Vim-style) |
-| <kbd>Print</kbd> | Area Screenshot (copy to clipboard with `grim` + `slurp`) |
-| <kbd>Shift</kbd> + <kbd>Print</kbd> | Full Screenshot (saved to `~/Pictures`) |
+| <kbd>Super</kbd> + <kbd>H</kbd> / <kbd>J</kbd> / <kbd>K</kbd> / <kbd>L</kbd> | Move Window Focus Left / Down / Up / Right (Vim-style) |
+| <kbd>Print</kbd> / <kbd>PrtSc</kbd> | **Capture Region Screenshot** (Interactive selection; copied to clipboard & saved to `~/Pictures/Screenshots/`) |
+| <kbd>Shift</kbd> + <kbd>Print</kbd> | **Capture Fullscreen Screenshot** (Copied to clipboard & saved to `~/Pictures/Screenshots/`) |
+| <kbd>Volume Up / Down / Mute</kbd> | Adjust or Toggle Audio Volume (`wpctl`) |
+| <kbd>Brightness Up / Down</kbd> | Adjust Display Brightness (`brightnessctl`) |
 
 ---
 
-<<<<<<< HEAD
-##  License
+## License
 MIT License. Feel free to use, modify, and rice your setup!
-=======

@@ -25,7 +25,7 @@ sudo pacman -S --needed \
     slurp \
     wl-clipboard
 
-echo "🗑️ [2/4] Removing Dolphin and Konsole..."
+echo " [2/4] Removing Dolphin and Konsole..."
 # Remove dolphin and its plugins/service menus, and konsole
 if pacman -Q dolphin >/dev/null 2>&1 || pacman -Q konsole >/dev/null 2>&1; then
     sudo pacman -R --cascade --nodeps dolphin dolphin-plugins konsole 2>/dev/null || \
@@ -66,7 +66,6 @@ fi
 <<<<<<< HEAD
 echo " [4/4] Verifying Configuration..."
 echo "  • Hyprland config:  $HOME/.config/hypr/hyprland.conf"
-=======
 echo "  • Quickshell bar:   $HOME/.config/quickshell/shell.qml"
 echo "  • Hyprpaper config: $HOME/.config/hypr/hyprpaper.conf"
 echo "  • Default terminal: $(xdg-mime query default x-scheme-handler/terminal 2>/dev/null || echo 'kitty')"

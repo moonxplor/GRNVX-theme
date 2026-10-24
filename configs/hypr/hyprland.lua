@@ -20,8 +20,9 @@ hl.monitor({
 -- Default Applications
 local terminal    = "kitty"
 local fileManager = "thunar"
-local menu        = "rofi -show drun || wofi --show drun"
+local menu        = (os.getenv("HOME") or "/home/moonxplor") .. "/.local/bin/hypr-launcher.sh"
 local browser     = "brave"
+local screenshot  = (os.getenv("HOME") or "/home/moonxplor") .. "/.local/bin/hypr-screenshot.sh"
 
 -- Autostart
 hl.on("hyprland.start", function ()
@@ -154,10 +155,14 @@ hl.window_rule({
 -- Keybindings
 local mainMod = "SUPER"
 
+-- App Launcher (Tap Super or Super+Space)
+hl.bind("SUPER + SUPER_L",      hl.dsp.exec_cmd(menu), { release = true })
+hl.bind("SUPER + SUPER_R",      hl.dsp.exec_cmd(menu), { release = true })
+hl.bind(mainMod .. " + Space",  hl.dsp.exec_cmd(menu))
+
 hl.bind(mainMod .. " + Return", hl.dsp.exec_cmd(terminal))
 hl.bind(mainMod .. " + E",      hl.dsp.exec_cmd(fileManager))
 hl.bind(mainMod .. " + D",      hl.dsp.exec_cmd(browser))
-hl.bind(mainMod .. " + Space",  hl.dsp.exec_cmd(menu))
 hl.bind(mainMod .. " + Q",      hl.dsp.window.close())
 hl.bind(mainMod .. " + C",      hl.dsp.window.close())
 hl.bind(mainMod .. " + F",      hl.dsp.window.fullscreen(0))
@@ -201,6 +206,6 @@ hl.bind("XF86AudioMicMute",     hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_S
 hl.bind("XF86MonBrightnessUp",  hl.dsp.exec_cmd("brightnessctl set +5%"),                           { locked = true, repeating = true })
 hl.bind("XF86MonBrightnessDown",hl.dsp.exec_cmd("brightnessctl set 5%-"),                            { locked = true, repeating = true })
 
--- Screenshots
-hl.bind("Print",         hl.dsp.exec_cmd('grim -g "$(slurp)" - | wl-copy'))
-hl.bind("SHIFT + Print", hl.dsp.exec_cmd("grim ~/Pictures/Screenshot_$(date +'%Y-%m-%d_%H-%M-%S').png"))
+-- Screenshots (Print = selection, SHIFT+Print = fullscreen)
+hl.bind("Print",         hl.dsp.exec_cmd(screenshot .. " region"))
+hl.bind("SHIFT + Print", hl.dsp.exec_cmd(screenshot .. " full"))

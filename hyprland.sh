@@ -63,8 +63,10 @@ if [ -f "$SCRIPT_DIR/bin/hypr-status.sh" ]; then
     chmod +x "$HOME/.local/bin/hypr-status.sh"
 fi
 
+<<<<<<< HEAD
 echo " [4/4] Verifying Configuration..."
 echo "  • Hyprland config:  $HOME/.config/hypr/hyprland.conf"
+=======
 echo "  • Quickshell bar:   $HOME/.config/quickshell/shell.qml"
 echo "  • Hyprpaper config: $HOME/.config/hypr/hyprpaper.conf"
 echo "  • Default terminal: $(xdg-mime query default x-scheme-handler/terminal 2>/dev/null || echo 'kitty')"

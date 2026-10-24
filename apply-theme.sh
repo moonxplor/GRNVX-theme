@@ -47,7 +47,7 @@ apply_wallpaper() {
     esac
 
     if [ -f "$wp" ]; then
-        echo "🌲 Applying wallpaper: $(basename "$wp")..."
+        echo " Applying wallpaper: $(basename "$wp")..."
         if pgrep -x Hyprland >/dev/null 2>&1; then
             hyprctl hyprpaper preload "$wp" 2>/dev/null || true
             hyprctl hyprpaper wallpaper "eDP-1,$wp" 2>/dev/null || true
@@ -64,12 +64,12 @@ apply_wallpaper() {
 }
 
 apply_colorscheme() {
-    echo "🎨 Applying Everforest Dark color scheme..."
+    echo " Applying Everforest Dark color scheme..."
     plasma-apply-colorscheme EverforestDark
 }
 
 apply_panels() {
-    echo "🌿 Applying Everforest Waybar top pill preset and dock..."
+    echo " Applying Everforest Waybar top pill preset and dock..."
     mkdir -p "$HOME/.config/panel-colorizer/presets"
     if [ -d "$SCRIPT_DIR/configs/panel-colorizer" ]; then
         cp -r "$SCRIPT_DIR/configs/panel-colorizer/"* "$HOME/.config/panel-colorizer/presets/" 2>/dev/null || true
@@ -132,7 +132,7 @@ apply_panels() {
     
     # Configure System Tray compact sizing (~5cm x 5cm / 224x224 px) & Display Adjustments
     if [ -d "$SCRIPT_DIR/configs/systemtray-compact" ] && [ -f "$SCRIPT_DIR/src/libplasma_rcc_hook.cpp" ]; then
-        echo "📦 Compiling System Tray compact popup overrides & Display Adjuster..."
+        echo " Compiling System Tray compact popup overrides & Display Adjuster..."
         mkdir -p "$HOME/.local/share/plasma" "$HOME/.local/lib" "$HOME/.config/environment.d" "$HOME/.local/bin" "$HOME/.config/autostart"
         
         # Install display adjustment script and autostart
@@ -216,7 +216,7 @@ for (var i = 0; i < p.length; i++) {
 }
 
 reconfigure_kwin() {
-    echo "✨ Reconfiguring KWin window effects, launcher & dynamic workspace shortcuts..."
+    echo " Reconfiguring KWin window effects, launcher & dynamic workspace shortcuts..."
     kwriteconfig6 --file kwinrc --group Plugins --key desktopchangeosdEnabled false
     kwriteconfig6 --file kwinrc --group Plugins --key dynamic-workspacesEnabled true
     # Configure standalone Meta key to open Application Launcher (Plasma 6 native shortcut)
@@ -317,7 +317,7 @@ except Exception:
 }
 
 restart_shell() {
-    echo "🔄 Refreshing Plasma Shell..."
+    echo "Refreshing Plasma Shell..."
     systemctl --user restart plasma-plasmashell.service
     sleep 1.5
     apply_panels

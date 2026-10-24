@@ -29,7 +29,7 @@ def adapt_to_wallpaper(wallpaper_path):
         print(f"Error: Wallpaper {wallpaper_path} not found.")
         sys.exit(1)
 
-    print(f"🖼️  Analyzing wallpaper: {os.path.basename(wallpaper_path)}...")
+    print(f"  Analyzing wallpaper: {os.path.basename(wallpaper_path)}...")
     im = Image.open(wallpaper_path).convert("RGB")
     w, h = im.size
 
@@ -70,8 +70,8 @@ def adapt_to_wallpaper(wallpaper_path):
     else:
         bot_alpha = 0.50
 
-    print(f"✨ Top Waybar:   tone={top_bg_hex}, alpha={top_alpha:.2f} ({int((1-top_alpha)*100)}% transparent, lum={top_lum:.1f})")
-    print(f"✨ Bottom Dock:  tone={bot_bg_hex}, alpha={bot_alpha:.2f} ({int((1-bot_alpha)*100)}% transparent, lum={bot_lum:.1f})")
+    print(f" Top Waybar:   tone={top_bg_hex}, alpha={top_alpha:.2f} ({int((1-top_alpha)*100)}% transparent, lum={top_lum:.1f})")
+    print(f" Bottom Dock:  tone={bot_bg_hex}, alpha={bot_alpha:.2f} ({int((1-bot_alpha)*100)}% transparent, lum={bot_lum:.1f})")
 
     # 3. Update Everforest Waybar preset (both the bar itself and widget pills)
     wb_preset_path = os.path.expanduser("~/.config/panel-colorizer/presets/Everforest Waybar/settings.json")

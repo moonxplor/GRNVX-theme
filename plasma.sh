@@ -11,7 +11,7 @@ prep_hyprland_standalone() {
     echo "🛡️ [1/3] Protecting essential system fonts and daemons..."
     sudo pacman -D --asexplicit ttf-jetbrains-mono-nerd inter-font accountsservice 2>/dev/null || true
 
-    echo "📦 [2/3] Installing standalone tools for Hyprland..."
+    echo " [2/3] Installing standalone tools for Hyprland..."
     # sddm: Display / Login Manager
     # network-manager-applet: System tray WiFi & Network (nm-applet)
     # pavucontrol: Sound & Volume management
@@ -30,7 +30,7 @@ prep_hyprland_standalone() {
         slurp \
         wl-clipboard
 
-    echo "🔑 [3/3] Enabling SDDM login manager..."
+    echo "[3/3] Enabling SDDM login manager..."
     sudo systemctl disable plasmalogin.service 2>/dev/null || true
     sudo systemctl enable --force sddm.service
     echo "✓ SDDM enabled as your login manager."
@@ -120,7 +120,7 @@ if [ "$MODE" = "--purge" ]; then
     prep_hyprland_standalone
     purge_plasma_packages
     echo ""
-    echo "🎉 KDE Plasma has been completely removed!"
+    echo " KDE Plasma has been completely removed!"
     echo "Your system is now 100% powered by Hyprland, Quickshell, Kitty, and Thunar."
     exit 0
 fi
@@ -149,5 +149,5 @@ else
     prep_hyprland_standalone
     purge_plasma_packages
     echo ""
-    echo "🎉 KDE Plasma has been completely removed!"
+    echo " KDE Plasma has been completely removed!"
 fi

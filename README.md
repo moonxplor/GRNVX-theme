@@ -5,7 +5,11 @@
 
 ---
 
+<<<<<<< HEAD
 ##  Features
+=======
+## Features
+>>>>>>> 14c8eed (updated)
 
 - ** Dark Palette**: Deep earthy tones (`#2d353b`, `#232a2e`) balanced with soft sage (`#a7c080`) and calm cyan (`#70c0ba`) accents.
 - **Waybar Aesthetic on Plasma 6**: Floating top pill bar and dock powered by `panel-colorizer` with subtle borders and shadows.
@@ -22,7 +26,10 @@
   - Disabled popup arrow OSD transitions and desktop close buttons for a distraction-free workflow.
 - **Dual Desktop Experience**:
   - **KDE Plasma 6** mode with native panel styling.
-  - **Hyprland + Quickshell** mode for lightweight Wayland tiling.
+  - **Hyprland + Quickshell** mode for lightweight Wayland tiling:
+    - Native Lua config (`hyprland.lua`) for clean, deprecation-free syntax with Hyprland 0.56+.
+    - Modern block-syntax `hyprpaper` setup.
+    - Custom QML **Quickshell** pill top bar with live telemetry (Volume, Brightness, Battery, WiFi, Clock, and Workspaces).
 - **Curated Wallpapers**: 6 high-res wallpapers designed to complement the Everforest color scheme.
 
 ---
@@ -35,18 +42,24 @@ GRNVX-theme/
 ├── plasma.sh            # Safe helper to prepare standalone Hyprland or purge Plasma
 ├── hyprland.sh          # Hyprland + Quickshell standalone installer & config
 ├── adapt_waybar.py      # Palette extraction script matching bar colors to wallpaper
+├── bin/
+│   └── hypr-status.sh   # High-speed status telemetry provider for Quickshell
 ├── configs/
 │   ├── kwin-scripts/    # Dynamic workspaces KWin 6 automation script
 │   ├── panel-colorizer/ # 'Everforest Waybar' and 'Everforest Dock' presets
-│   ├── hypr/            # Hyprland and Hyprpaper configurations
-│   └── quickshell/      # Modern Waybar-like Quickshell bar configuration
+│   ├── hypr/
+│   │   ├── hyprland.lua # Modern native Lua configuration for Hyprland
+│   │   ├── hyprland.conf# Legacy configuration backup
+│   │   └── hyprpaper.conf # Block-syntax wallpaper configuration (Hyprpaper 0.8+)
+│   └── quickshell/
+│       └── shell.qml    # Modern Waybar-like Quickshell bar configuration
 ├── icons/               # Pixel-crafted SVG icons (audio, battery, bluetooth)
 └── wallpapers/          # Curated high-resolution Everforest backgrounds
 ```
 
 ---
 
-## 🚀 Installation & Usage
+## Installation & Usage
 
 ### 1. Apply the Theme on KDE Plasma 6
 To apply the entire rice (wallpapers, panel presets, custom icons, and KWin shortcuts):
@@ -71,19 +84,28 @@ Easily cycle through included wallpapers:
 ```
 
 ### 3. Hyprland + Quickshell Mode (Optional)
-If migrating to standalone Hyprland:
+To install and deploy the standalone Hyprland and Quickshell rice:
+
+```bash
+# Automated installer (packages, defaults, Lua configs, Quickshell bar)
+./hyprland.sh
+```
+
+Or if migrating from KDE Plasma and purging Plasma completely:
 
 ```bash
 # Step 1: Install standalone tools & enable SDDM
 ./plasma.sh --prep
 
-# Step 2: Log out, switch session to Hyprland, and clean up
+# Step 2: Log out, switch session to Hyprland in SDDM, and clean up Plasma
 ./plasma.sh --purge
 ```
 
 ---
 
-## ⌨️ Keybindings (Plasma 6)
+## Keybindings
+
+### KDE Plasma 6
 
 | Shortcut | Action |
 | :--- | :--- |
@@ -100,7 +122,29 @@ If migrating to standalone Hyprland:
 | <kbd>PrtSc</kbd>, then <kbd>S</kbd> *(or <kbd>Shift</kbd> + <kbd>PrtSc</kbd>)* | **Record Selected Region** |
 | <kbd>PrtSc</kbd>, then <kbd>R</kbd> *(or <kbd>Super</kbd> + <kbd>PrtSc</kbd>)* | **Record Active Window** |
 
+### Hyprland
+
+| Shortcut | Action |
+| :--- | :--- |
+| <kbd>Super</kbd> + <kbd>Return</kbd> | Launch Kitty Terminal |
+| <kbd>Super</kbd> + <kbd>Space</kbd> | Open App Launcher (Rofi) |
+| <kbd>Super</kbd> + <kbd>E</kbd> | Open File Manager (Thunar) |
+| <kbd>Super</kbd> + <kbd>D</kbd> | Open Web Browser (Firefox) |
+| <kbd>Super</kbd> + <kbd>Q</kbd> *(or <kbd>Super</kbd> + <kbd>C</kbd>)* | **Close Active Window** |
+| <kbd>Super</kbd> + <kbd>F</kbd> | Toggle Fullscreen |
+| <kbd>Super</kbd> + <kbd>V</kbd> | Toggle Floating Mode |
+| <kbd>Super</kbd> + <kbd>S</kbd> | Toggle Dwindle Split Layout |
+| <kbd>Super</kbd> + <kbd>1</kbd> .. <kbd>7</kbd> | Switch to Workspace 1 through 7 |
+| <kbd>Super</kbd> + <kbd>Shift</kbd> + <kbd>1</kbd> .. <kbd>7</kbd> | Move Window to Workspace 1 through 7 |
+| <kbd>Super</kbd> + <kbd>→</kbd> / <kbd>←</kbd> | Switch to Next / Previous Workspace |
+| <kbd>Super</kbd> + <kbd>Shift</kbd> + <kbd>→</kbd> / <kbd>←</kbd> | Move Active Window to Next / Previous Workspace |
+| <kbd>Super</kbd> + <kbd>H</kbd> / <kbd>J</kbd> / <kbd>K</kbd> / <kbd>L</kbd> | Move Focus Left / Down / Up / Right (Vim-style) |
+| <kbd>Print</kbd> | Area Screenshot (copy to clipboard with `grim` + `slurp`) |
+| <kbd>Shift</kbd> + <kbd>Print</kbd> | Full Screenshot (saved to `~/Pictures`) |
+
 ---
 
+<<<<<<< HEAD
 ##  License
 MIT License. Feel free to use, modify, and rice your setup!
+=======

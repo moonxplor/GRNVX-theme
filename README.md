@@ -3,11 +3,6 @@
 > **A minimal, cohesive green rice for Garuda Linux & Arch Linux.**  
 > Crafted with a Waybar-style pill topbar, custom status icons, smooth workspace navigation, and curated wallpapers for both **KDE Plasma 6** and **Hyprland**.
 
----
-
-<<<<<<< HEAD
-##  Features
-=======
 ## Features
 >>>>>>> 14c8eed (updated)
 

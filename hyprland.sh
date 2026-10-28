@@ -58,16 +58,16 @@ echo " [3.5/4] Deploying Hyprland and Quickshell configurations..."
 mkdir -p "$HOME/.config/hypr" "$HOME/.config/quickshell" "$HOME/.local/bin"
 cp -r "$SCRIPT_DIR/configs/hypr/"* "$HOME/.config/hypr/"
 cp -r "$SCRIPT_DIR/configs/quickshell/"* "$HOME/.config/quickshell/"
-if [ -f "$SCRIPT_DIR/bin/hypr-status.sh" ]; then
-    cp -f "$SCRIPT_DIR/bin/hypr-status.sh" "$HOME/.local/bin/"
-    chmod +x "$HOME/.local/bin/hypr-status.sh"
+if [ -d "$SCRIPT_DIR/bin" ]; then
+    cp -f "$SCRIPT_DIR/bin/"* "$HOME/.local/bin/"
+    chmod +x "$HOME/.local/bin/"*
 fi
 
-<<<<<<< HEAD
-echo " [4/4] Verifying Configuration..."
-echo "  • Hyprland config:  $HOME/.config/hypr/hyprland.conf"
+echo "✨ [4/4] Verifying Configuration..."
+echo "  • Hyprland config:  $HOME/.config/hypr/hyprland.lua"
 echo "  • Quickshell bar:   $HOME/.config/quickshell/shell.qml"
 echo "  • Hyprpaper config: $HOME/.config/hypr/hyprpaper.conf"
+echo "  • Status scripts:   $HOME/.local/bin/hypr-*.sh"
 echo "  • Default terminal: $(xdg-mime query default x-scheme-handler/terminal 2>/dev/null || echo 'kitty')"
 echo "  • Default files:    $(xdg-mime query default inode/directory 2>/dev/null)"
 

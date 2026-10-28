@@ -44,6 +44,7 @@ hl.env("XDG_SESSION_DESKTOP", "Hyprland")
 hl.env("QT_QPA_PLATFORM", "wayland;xcb")
 hl.env("QT_QPA_PLATFORMTHEME", "qt6ct")
 hl.env("TERMINAL", "kitty")
+hl.env("PATH", (os.getenv("HOME") or "/home/moonxplor") .. "/.local/bin:" .. (os.getenv("PATH") or "/usr/local/bin:/usr/bin:/bin"))
 
 -- Input & Gestures
 hl.config({
@@ -71,8 +72,8 @@ hl.gesture({
 -- General Styling & Decorations (Everforest Dark Palette)
 hl.config({
     general = {
-        gaps_in = 4,
-        gaps_out = 8,
+        gaps_in = 2,
+        gaps_out = 4,
         border_size = 2,
         col = {
             active_border = { colors = {"rgb(a7c080)", "rgb(83c092)"}, angle = 45 },
@@ -143,7 +144,7 @@ hl.window_rule({
 hl.window_rule({
     name = "opacity-kitty",
     match = { class = "^(kitty)$" },
-    opacity = "0.92 0.88",
+    opacity = "1.0 1.0",
 })
 
 hl.window_rule({

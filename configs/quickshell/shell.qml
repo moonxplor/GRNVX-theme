@@ -270,7 +270,7 @@ PanelWindow {
                     MouseArea {
                         anchors.fill: parent
                         cursorShape: Qt.PointingHandCursor
-                        onClicked: Hyprland.dispatch("exec nm-connection-editor")
+                        onClicked: Hyprland.dispatch("exec ~/.local/bin/hypr-network.sh")
                     }
                 }
 
@@ -294,7 +294,7 @@ PanelWindow {
                     MouseArea {
                         anchors.fill: parent
                         cursorShape: Qt.PointingHandCursor
-                        onClicked: Hyprland.dispatch("exec blueman-manager")
+                        onClicked: Hyprland.dispatch("exec ~/.local/bin/hypr-bluetooth.sh")
                     }
                 }
 
@@ -330,7 +330,15 @@ PanelWindow {
                     MouseArea {
                         anchors.fill: parent
                         cursorShape: Qt.PointingHandCursor
-                        onClicked: Hyprland.dispatch("exec pavucontrol")
+                        acceptedButtons: Qt.LeftButton | Qt.RightButton
+                        onClicked: mouse => {
+                            if (mouse.button === Qt.RightButton) {
+                                Hyprland.dispatch("exec command -v pavucontrol >/dev/null && pavucontrol || plasma-open-settings kcm_pulseaudio");
+                            } else {
+                                Hyprland.dispatch("exec wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle");
+                                statusTimer.restart();
+                            }
+                        }
                         onWheel: wheel => {
                             if (wheel.angleDelta.y > 0) {
                                 Hyprland.dispatch("exec wpctl set-volume -l 1.4 @DEFAULT_AUDIO_SINK@ 5%+");
@@ -374,6 +382,10 @@ PanelWindow {
                     MouseArea {
                         anchors.fill: parent
                         cursorShape: Qt.PointingHandCursor
+                        onClicked: {
+                            Hyprland.dispatch("exec brightnessctl set +10%");
+                            statusTimer.restart();
+                        }
                         onWheel: wheel => {
                             if (wheel.angleDelta.y > 0) {
                                 Hyprland.dispatch("exec brightnessctl set +5%");
@@ -440,33 +452,11 @@ PanelWindow {
                     MouseArea {
                         anchors.fill: parent
                         cursorShape: Qt.PointingHandCursor
-                        onClicked: Hyprland.dispatch("exec kitty")
+                        onClicked: Hyprland.dispatch("exec ~/.local/bin/kitty")
                     }
                 }
 
-                // 7. File Manager Quick Launcher
-                Rectangle {
-                    width: 26
-                    height: 24
-                    radius: 6
-                    color: "#253438"
-
-                    Text {
-                        anchors.centerIn: parent
-                        text: "󰉋" // Thunar folder icon
-                        font.family: "JetBrainsMono Nerd Font"
-                        font.pixelSize: 13
-                        color: "#83c092"
-                    }
-
-                    MouseArea {
-                        anchors.fill: parent
-                        cursorShape: Qt.PointingHandCursor
-                        onClicked: Hyprland.dispatch("exec thunar")
-                    }
-                }
-
-                // 8. Power / Leave Pill
+                // 7. Power / Leave Pill
                 Rectangle {
                     width: 26
                     height: 24
@@ -486,7 +476,7 @@ PanelWindow {
                     MouseArea {
                         anchors.fill: parent
                         cursorShape: Qt.PointingHandCursor
-                        onClicked: Hyprland.dispatch("exec command -v wlogout >/dev/null && wlogout || hyprctl dispatch exit")
+                        onClicked: Hyprland.dispatch("exec ~/.local/bin/hypr-power.sh")
                     }
                 }
 

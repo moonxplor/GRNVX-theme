@@ -72,7 +72,8 @@
     {
       "type": "theme",
       "key": "  󰉼",
-      "keyColor": "bright_green"
+      "keyColor": "bright_green",
+      "format": "{theme1~0,6} [Qt]"
     },
     {
       "type": "terminal",
@@ -82,12 +83,14 @@
     {
       "type": "cpu",
       "key": "  󰻠",
-      "keyColor": "yellow"
+      "keyColor": "yellow",
+      "format": "{name~18} @ {freq-max}"
     },
     {
       "type": "gpu",
       "key": "  󰢮",
-      "keyColor": "yellow"
+      "keyColor": "yellow",
+      "format": "{name}{?frequency} @ {frequency}{?}"
     },
     {
       "type": "memory",

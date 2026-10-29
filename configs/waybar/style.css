@@ -11,7 +11,7 @@
 
 window#waybar {
   background: transparent;
-  color: #d3c6aa;
+  color: #7ea863;
 }
 
 /* Base pill module styling */
@@ -25,48 +25,48 @@ window#waybar {
 #battery,
 #tray,
 #custom-power {
-  background: rgba(5, 10, 5, 0.18);
-  color: #d3c6aa;
+  background: rgba(18, 54, 34, 0.40);
+  color: #7ea863;
   padding: 4px 12px;
   margin: 3px 2px;
   border-radius: 10px;
-  border: 1px solid #a7c080;
+  border: 1px solid #7ea863;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
   transition: all 0.2s ease-in-out;
 }
 
 #custom-garuda {
-  color: #a7c080;
+  color: #7ea863;
   font-size: 15px;
   padding: 4px 10px;
-  border: 1px solid #a7c080;
+  border: 1px solid #7ea863;
 }
 
 #custom-garuda:hover {
-  background: #a7c080;
+  background: #7ea863;
   color: #1e2326;
 }
 
 #clock {
-  color: #dbbc7f;
-  border-color: #a7c080;
+  color: #7ea863;
+  border-color: #7ea863;
   font-size: 13px;
 }
 
 #clock:hover {
-  border-color: #a7c080;
+  border-color: #7ea863;
 }
 
 #cpu {
-  color: #a7c080;
+  color: #7ea863;
 }
 
 #memory {
-  color: #83c092;
+  color: #7ea863;
 }
 
 #pulseaudio {
-  color: #39ff14;
+  color: #7ea863;
 }
 
 #pulseaudio.muted {
@@ -75,7 +75,7 @@ window#waybar {
 }
 
 #network {
-  color: #39ff14;
+  color: #7ea863;
 }
 
 #network.disconnected {
@@ -83,11 +83,11 @@ window#waybar {
 }
 
 #battery {
-  color: #39ff14;
+  color: #7ea863;
 }
 
 #battery.charging {
-  color: #39ff14;
+  color: #7ea863;
 }
 
 #battery.warning:not(.charging) {

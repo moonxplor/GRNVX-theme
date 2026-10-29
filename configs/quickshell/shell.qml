@@ -46,6 +46,16 @@ PanelWindow {
         }
     }
 
+    // Process to run system actions reliably without shell path issues
+    Process {
+        id: actionProc
+        command: ["sh", "-c", "echo"]
+        function exec(cmd) {
+            command = ["sh", "-c", cmd];
+            running = true;
+        }
+    }
+
     // Function to dynamically get open application logos for each workspace
     function getAppLogos(wsId) {
         try {
@@ -270,7 +280,10 @@ PanelWindow {
                     MouseArea {
                         anchors.fill: parent
                         cursorShape: Qt.PointingHandCursor
-                        onClicked: Hyprland.dispatch("exec ~/.local/bin/hypr-network.sh")
+                        onClicked: {
+                            actionProc.exec("/home/moonxplor/.local/bin/hypr-network.sh");
+                            Hyprland.dispatch("exec /home/moonxplor/.local/bin/hypr-network.sh");
+                        }
                     }
                 }
 
@@ -294,7 +307,10 @@ PanelWindow {
                     MouseArea {
                         anchors.fill: parent
                         cursorShape: Qt.PointingHandCursor
-                        onClicked: Hyprland.dispatch("exec ~/.local/bin/hypr-bluetooth.sh")
+                        onClicked: {
+                            actionProc.exec("/home/moonxplor/.local/bin/hypr-bluetooth.sh");
+                            Hyprland.dispatch("exec /home/moonxplor/.local/bin/hypr-bluetooth.sh");
+                        }
                     }
                 }
 
@@ -452,7 +468,10 @@ PanelWindow {
                     MouseArea {
                         anchors.fill: parent
                         cursorShape: Qt.PointingHandCursor
-                        onClicked: Hyprland.dispatch("exec ~/.local/bin/kitty")
+                        onClicked: {
+                            actionProc.exec("/home/moonxplor/.local/bin/kitty");
+                            Hyprland.dispatch("exec /home/moonxplor/.local/bin/kitty");
+                        }
                     }
                 }
 
@@ -462,7 +481,7 @@ PanelWindow {
                     height: 24
                     radius: 6
                     color: "#253438"
-                    border.color: "#40e67e80"
+                    border.color: powerMenu.visible ? "#e67e80" : "#40e67e80"
                     border.width: 1
 
                     Text {
@@ -475,11 +494,95 @@ PanelWindow {
 
                     MouseArea {
                         anchors.fill: parent
+                        acceptedButtons: Qt.LeftButton | Qt.RightButton
                         cursorShape: Qt.PointingHandCursor
-                        onClicked: Hyprland.dispatch("exec ~/.local/bin/hypr-power.sh")
+                        onClicked: mouse => {
+                            if (mouse.button === Qt.RightButton) {
+                                actionProc.exec("/home/moonxplor/.local/bin/hypr-power.sh");
+                                Hyprland.dispatch("exec /home/moonxplor/.local/bin/hypr-power.sh");
+                            } else {
+                                powerMenu.visible = !powerMenu.visible;
+                            }
+                        }
                     }
                 }
 
+            }
+        }
+    }
+
+    // Native Everforest Power Menu Popup
+    PopupWindow {
+        id: powerMenu
+        anchor.window: root
+        anchor.rect.x: root.width - implicitWidth - 10
+        anchor.rect.y: 36
+        implicitWidth: 160
+        implicitHeight: powerCol.implicitHeight + 16
+        visible: false
+        color: "transparent"
+
+        Rectangle {
+            anchors.fill: parent
+            radius: 8
+            color: "#1e2326"
+            border.color: "#35505a"
+            border.width: 1
+
+            ColumnLayout {
+                id: powerCol
+                anchors.fill: parent
+                anchors.margins: 8
+                spacing: 4
+
+                Repeater {
+                    model: [
+                        { name: "Lock Screen", icon: "󰌾", color: "#7fbbb3", cmd: "hyprlock || swaylock || loginctl lock-session" },
+                        { name: "Log Out",     icon: "󰍃", color: "#dbbc7f", cmd: "hyprctl dispatch exit || loginctl terminate-user $USER" },
+                        { name: "Suspend",     icon: "󰤄", color: "#83c092", cmd: "systemctl suspend" },
+                        { name: "Reboot",      icon: "󰜉", color: "#e69875", cmd: "systemctl reboot" },
+                        { name: "Shut Down",   icon: "⏻", color: "#e67e80", cmd: "systemctl poweroff" }
+                    ]
+
+                    Rectangle {
+                        Layout.fillWidth: true
+                        implicitHeight: 28
+                        radius: 4
+                        color: optMouse.containsMouse ? "#2e383c" : "transparent"
+
+                        RowLayout {
+                            anchors.fill: parent
+                            anchors.leftMargin: 8
+                            anchors.rightMargin: 8
+                            spacing: 8
+
+                            Text {
+                                text: modelData.icon
+                                font.family: "JetBrainsMono Nerd Font"
+                                color: modelData.color
+                                font.pixelSize: 13
+                            }
+                            Text {
+                                text: modelData.name
+                                font.family: "JetBrainsMono Nerd Font"
+                                color: "#d3c6aa"
+                                font.pixelSize: 12
+                            }
+                        }
+
+                        MouseArea {
+                            id: optMouse
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            cursorShape: Qt.PointingHandCursor
+                            onClicked: {
+                                powerMenu.visible = false;
+                                actionProc.exec(modelData.cmd);
+                                Hyprland.dispatch("exec " + modelData.cmd);
+                            }
+                        }
+                    }
+                }
             }
         }
     }

@@ -39,11 +39,19 @@ def adapt_to_wallpaper(wallpaper_path):
     top_avg = [int(v) for v in top_stat.mean]
     top_lum = 0.2126 * top_avg[0] + 0.7152 * top_avg[1] + 0.0722 * top_avg[2]
 
-    # Calculate top background & alpha according to wallpaper luminance
+    # Top panel background: dark translucent glass matching wallpaper
     top_bg_r = max(5, int(top_avg[0] * 0.75))
     top_bg_g = max(10, int(top_avg[1] * 0.75))
     top_bg_b = max(5, int(top_avg[2] * 0.75))
     top_bg_hex = f"#{top_bg_r:02x}{top_bg_g:02x}{top_bg_b:02x}"
+
+    # Element pills: rich deep forest green tone
+    elem_bg_r = max(14, int(top_avg[0] * 0.25 + 10))
+    elem_bg_g = max(54, int(top_avg[1] * 0.35 + 38))
+    elem_bg_b = max(26, int(top_avg[2] * 0.25 + 16))
+    elem_bg_hex = f"#{elem_bg_r:02x}{elem_bg_g:02x}{elem_bg_b:02x}"
+    elem_border_hex = "#7ea863"
+    elem_alpha = 0.40
 
     if top_lum < 50:
         top_alpha = 0.18   # Sheer glass (82% transparent) on dark backgrounds
@@ -87,31 +95,44 @@ def adapt_to_wallpaper(wallpaper_path):
         p_norm["backgroundColor"]["sourceType"] = 0
         p_norm["backgroundColor"]["custom"] = top_bg_hex
         p_norm["backgroundColor"]["alpha"] = top_alpha
+        p_norm["foregroundColor"]["enabled"] = True
+        p_norm["foregroundColor"]["sourceType"] = 1
+        p_norm["foregroundColor"]["followColor"] = 0
+        p_norm["foregroundColor"]["custom"] = elem_border_hex
 
-        # Widget pills inside top bar: matching adaptive tone, transparency, and Everforest green border
+        # Widget pills inside top bar: rich deep green glass pills with elegant border and deep green font
         w_norm = wb_data["globalSettings"]["widgets"]["normal"]
         w_norm["backgroundColor"]["sourceType"] = 0
-        w_norm["backgroundColor"]["custom"] = top_bg_hex
-        w_norm["backgroundColor"]["alpha"] = top_alpha
+        w_norm["backgroundColor"]["custom"] = elem_bg_hex
+        w_norm["backgroundColor"]["alpha"] = elem_alpha
+        w_norm["foregroundColor"]["enabled"] = True
+        w_norm["foregroundColor"]["sourceType"] = 1
+        w_norm["foregroundColor"]["followColor"] = 0
+        w_norm["foregroundColor"]["custom"] = elem_border_hex
         w_norm["blurBehind"] = True
         w_norm["border"]["enabled"] = True
         w_norm["border"]["width"] = 1
         w_norm["border"]["color"]["enabled"] = True
         w_norm["border"]["color"]["sourceType"] = 1
-        w_norm["border"]["color"]["custom"] = "#a7c080"
+        w_norm["border"]["color"]["custom"] = elem_border_hex
         w_norm["border"]["color"]["alpha"] = 0.85
 
         if "trayWidgets" in wb_data["globalSettings"] and "normal" in wb_data["globalSettings"]["trayWidgets"]:
             t_norm = wb_data["globalSettings"]["trayWidgets"]["normal"]
+            t_norm["backgroundColor"]["enabled"] = True
             t_norm["backgroundColor"]["sourceType"] = 0
-            t_norm["backgroundColor"]["custom"] = top_bg_hex
-            t_norm["backgroundColor"]["alpha"] = top_alpha
+            t_norm["backgroundColor"]["custom"] = elem_bg_hex
+            t_norm["backgroundColor"]["alpha"] = elem_alpha
+            t_norm["foregroundColor"]["enabled"] = True
+            t_norm["foregroundColor"]["sourceType"] = 1
+            t_norm["foregroundColor"]["followColor"] = 0
+            t_norm["foregroundColor"]["custom"] = elem_border_hex
             t_norm["blurBehind"] = True
             t_norm["border"]["enabled"] = True
             t_norm["border"]["width"] = 1
             t_norm["border"]["color"]["enabled"] = True
             t_norm["border"]["color"]["sourceType"] = 1
-            t_norm["border"]["color"]["custom"] = "#a7c080"
+            t_norm["border"]["color"]["custom"] = elem_border_hex
             t_norm["border"]["color"]["alpha"] = 0.85
 
         if "nativePanel" in wb_data["globalSettings"]:
@@ -144,7 +165,7 @@ def adapt_to_wallpaper(wallpaper_path):
         with open(css_path, "w") as f:
             for line in lines:
                 if "background: rgba(" in line and "/*" not in line:
-                    line = f"  background: rgba({top_bg_r}, {top_bg_g}, {top_bg_b}, {top_alpha:.2f});\n"
+                    line = f"  background: rgba({elem_bg_r}, {elem_bg_g}, {elem_bg_b}, {elem_alpha:.2f});\n"
                 f.write(line)
 
     # 6. Push live updates via DBus

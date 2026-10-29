@@ -137,8 +137,14 @@ hl.window_rule({
 
 hl.window_rule({
     name = "float-pavucontrol-blueman",
-    match = { class = "^(pavucontrol|blueman-manager)$" },
+    match = { class = "^(pavucontrol|blueman-manager|zenity|yad)$" },
     float = true,
+})
+
+hl.window_rule({
+    name = "center-dialogs",
+    match = { class = "^(zenity|yad)$" },
+    center = true,
 })
 
 hl.window_rule({
@@ -210,3 +216,7 @@ hl.bind("XF86MonBrightnessDown",hl.dsp.exec_cmd("brightnessctl set 5%-"),       
 -- Screenshots (Print = selection, SHIFT+Print = fullscreen)
 hl.bind("Print",         hl.dsp.exec_cmd(screenshot .. " region"))
 hl.bind("SHIFT + Print", hl.dsp.exec_cmd(screenshot .. " full"))
+
+-- Power & Session Management (Physical Power key + Super+Escape)
+hl.bind("XF86PowerOff",         hl.dsp.exec_cmd("/home/moonxplor/.local/bin/hypr-power.sh"), { locked = true })
+hl.bind(mainMod .. " + Escape", hl.dsp.exec_cmd("/home/moonxplor/.local/bin/hypr-power.sh"))
